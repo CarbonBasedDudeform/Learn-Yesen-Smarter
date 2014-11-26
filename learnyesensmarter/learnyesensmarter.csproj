@@ -29,6 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,6 +52,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -197,12 +200,39 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Controllers\IAnswerRetrieval.cs" />
     <Compile Include="Controllers\IQuestionRetrieval.cs" />
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Neo4jDBModels.cs" />
-    <Compile Include="Models\SqlDBModels.cs" />
+    <Compile Include="Models\Question.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Review.cs">
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQLModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SQLModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQLModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SQLModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SQLModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SQLModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\TaskModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\SQLDatabase.mdf" />
+    <Content Include="App_Data\SQLDatabase_log.ldf">
+      <DependentUpon>SQLDatabase.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -259,7 +289,24 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <EntityDeploy Include="Models\SQLModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>SQLModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\SQLModel.edmx.diagram">
+      <DependentUpon>SQLModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
+    <Content Include="Models\SQLModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SQLModel.edmx</DependentUpon>
+      <LastGenOutput>SQLModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\SQLModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>SQLModel.edmx</DependentUpon>
+      <LastGenOutput>SQLModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\jquery-1.8.2.js" />
     <Content Include="Scripts\jquery-1.8.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -313,12 +360,23 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Questions\Retrieve.cshtml" />
+    <Content Include="Views\Questions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SqlDatabase\SqlDatabase.sqlproj">
+      <Project>{e0310995-2975-4525-8915-0fd2e3f232f7}</Project>
+      <Name>SqlDatabase</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
