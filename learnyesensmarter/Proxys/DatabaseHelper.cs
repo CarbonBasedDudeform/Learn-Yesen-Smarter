@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace learnyesensmarter.Controllers
 {
-    public class DatabaseProxy : IQuestionInserter, IQuestionRetrieval
+    public class DatabaseProxy : IQuestionInserter, IQuestionRetriever
     {
         public string Retrieve()
         {

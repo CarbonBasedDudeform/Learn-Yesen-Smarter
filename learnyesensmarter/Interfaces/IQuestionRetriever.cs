@@ -5,7 +5,8 @@ using System.Web;
 
 namespace learnyesensmarter.Controllers
 {
-    public interface IAnswerRetrieval
+    public interface IQuestionRetriever
     {
+        string Retrieve();
     }
 }

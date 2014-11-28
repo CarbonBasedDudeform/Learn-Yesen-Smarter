@@ -20,7 +20,7 @@ namespace learnyesensmarter.Controllers
         /// The parameters default to null because C# requires compile-time constants.
         /// To use the default database, call QuestionsController() without paramters.
         /// </remarks>
-        public QuestionsController(IQuestionRetrieval questionRetriever = null, IQuestionInserter questionInserter = null)
+        public QuestionsController(IQuestionRetriever questionRetriever = null, IQuestionInserter questionInserter = null)
         {
             _questionRetriever = questionRetriever;
             _questionInserter = questionInserter;
@@ -46,7 +46,7 @@ namespace learnyesensmarter.Controllers
 
         #region Question Retrieval
 
-        private IQuestionRetrieval _questionRetriever;
+        private IQuestionRetriever _questionRetriever;
 
         public ActionResult Retrieve(int id)
         {

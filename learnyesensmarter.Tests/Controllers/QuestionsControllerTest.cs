@@ -30,7 +30,7 @@ namespace learnyesensmarter.Tests.Controllers
         /// <summary>
         /// Dummy Question Retrieval Class for testing the Retrieve Method
         /// </summary>
-        public class DummyRetriever : IQuestionRetrieval
+        public class DummyRetriever : IQuestionRetriever
         {
             public string Retrieve()
             {
