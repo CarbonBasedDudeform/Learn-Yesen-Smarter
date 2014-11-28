@@ -261,4 +261,3 @@ C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnye
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter\obj\Debug\learnyesensmarter.pdb
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter\bin\SqlDatabase.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter\bin\SqlDatabase.pdb
-C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter\bin\learnyesensmarter.dll.CodeAnalysisLog.xml

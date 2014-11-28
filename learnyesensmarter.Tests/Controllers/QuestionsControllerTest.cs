@@ -25,19 +25,17 @@ namespace learnyesensmarter.Tests.Controllers
             Assert.IsNull(result.ViewBag.Message);
         }
 
+        #region Question Retrieval Tests
+
         /// <summary>
         /// Dummy Question Retrieval Class for testing the Retrieve Method
         /// </summary>
         public class DummyRetriever : IQuestionRetrieval
         {
-            public DummyRetriever()
+            public string Retrieve()
             {
-                Source = "Dummy Source";
-                Query = "Dummy Query";
+                return "dummy";
             }
-
-            public string Source { get; set; }
-            public string Query { get; set; }
         }
 
         [TestMethod]
@@ -50,7 +48,7 @@ namespace learnyesensmarter.Tests.Controllers
             //Act
             ViewResult result = controller.Retrieve(0) as ViewResult;
 
-            Assert.AreEqual(dummy.Source, result.ViewBag.Source);
+            Assert.AreEqual(dummy.Retrieve(), result.ViewBag.Result);
         }
 
         [TestMethod]
@@ -66,5 +64,36 @@ namespace learnyesensmarter.Tests.Controllers
 
             Assert.AreNotEqual(unexpected.ViewName, result.ViewName);
         }
+
+        #endregion
+
+        #region Question Insertion Tests
+
+        public class DummyInserter : IQuestionInserter
+        {
+            public string Insert(string question)
+            {
+                return question;
+            }
+        }
+
+        /// <summary>
+        /// This test simply tests that the insert method follows the correct logic of executing a query.
+        /// </summary>
+        [TestMethod]
+        public void Insert_Question()
+        {
+            //Arrange
+            DummyInserter dummy = new DummyInserter();
+            QuestionsController controller = new QuestionsController(null, dummy);
+            string question = "this is a question?";
+
+            //Act
+            ViewResult result = controller.Insert(question) as ViewResult; 
+            
+            Assert.AreEqual(dummy.Insert(question), result.ViewBag.Result);
+        }
+
+        #endregion
     }
 }
