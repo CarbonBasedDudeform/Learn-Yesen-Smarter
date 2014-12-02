@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using learnyesensmarter;
 using learnyesensmarter.Controllers;
+using learnyesensmarter.Models;
+using learnyesensmarter.Interfaces;
 
 namespace learnyesensmarter.Tests.Controllers
 {
@@ -30,11 +32,27 @@ namespace learnyesensmarter.Tests.Controllers
         /// <summary>
         /// Dummy Question Retrieval Class for testing the Retrieve Method
         /// </summary>
-        public class DummyRetriever : IQuestionRetriever
+        public class DummyRetriever : IQuestionRetriever, ICategoryRetriever
         {
-            public string Retrieve()
+            public string RetrieveQuestion(int id)
             {
                 return "dummy";
+            }
+
+            public string RetrieveCategory(int id)
+            {
+                if (id == IDENTITY_ID)
+                    return "identity";
+                else
+                    return "Something else";
+            }
+
+            public int RetrieveCategoryID(string cat)
+            {
+                if (cat.Equals("identity"))
+                    return IDENTITY_ID;
+                else
+                    return 9000;
             }
         }
 
@@ -43,12 +61,12 @@ namespace learnyesensmarter.Tests.Controllers
         {
             //Arrange
             DummyRetriever dummy = new DummyRetriever();
-            QuestionsController controller = new QuestionsController(dummy);
+            QuestionsController controller = new QuestionsController(questionRetriever: dummy);
 
             //Act
             ViewResult result = controller.Retrieve(0) as ViewResult;
 
-            Assert.AreEqual(dummy.Retrieve(), result.ViewBag.Result);
+            Assert.AreEqual(dummy.RetrieveQuestion(0), result.ViewBag.Result);
         }
 
         [TestMethod]
@@ -56,7 +74,7 @@ namespace learnyesensmarter.Tests.Controllers
         {
             //Arrange
             DummyRetriever dummy = new DummyRetriever();
-            QuestionsController controller = new QuestionsController(dummy);
+            QuestionsController controller = new QuestionsController(questionRetriever: dummy);
 
             //Act
             ViewResult result = controller.Retrieve(-1) as ViewResult;
@@ -65,15 +83,37 @@ namespace learnyesensmarter.Tests.Controllers
             Assert.AreNotEqual(unexpected.ViewName, result.ViewName);
         }
 
+        const int IDENTITY_ID = 1; 
+        [TestMethod]
+        public void Retrieve_category_id()
+        {
+            DummyRetriever dummy = new DummyRetriever();
+            QuestionsController controller = new QuestionsController(categoryRetriever: dummy);
+
+            int result = controller.RetrieveCategoryID("identity");
+
+            Assert.AreEqual(IDENTITY_ID, result);
+        }
+
+        [TestMethod]
+        public void Retrieve_category_identity_id()
+        {
+            DummyRetriever dummy = new DummyRetriever();
+            QuestionsController controller = new QuestionsController(categoryRetriever: dummy);
+
+            string result = controller.RetrieveCategory(IDENTITY_ID);
+
+            Assert.AreEqual(result, "identity");
+        }
         #endregion
 
         #region Question Insertion Tests
 
         public class DummyInserter : IQuestionInserter
         {
-            public string Insert(string question)
+            public string Insert(QuestionModel question)
             {
-                return question;
+                return question.Question;
             }
         }
 
@@ -85,8 +125,9 @@ namespace learnyesensmarter.Tests.Controllers
         {
             //Arrange
             DummyInserter dummy = new DummyInserter();
-            QuestionsController controller = new QuestionsController(null, dummy);
-            string question = "this is a question?";
+            QuestionsController controller = new QuestionsController(questionInserter: dummy);
+            QuestionModel question = new QuestionModel();
+            question.Question = "this is a question?";
 
             //Act
             ViewResult result = controller.Insert(question) as ViewResult; 

@@ -57,7 +57,7 @@
   <ItemGroup>
     <Build Include="Questions.sql" />
     <Build Include="Review.sql" />
-    <Build Include="Category.sql" />
+    <Build Include="Categories.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SqlDatabase.refactorlog" />

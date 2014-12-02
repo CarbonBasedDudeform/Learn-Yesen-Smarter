@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using learnyesensmarter.Models;
+using learnyesensmarter.Interfaces;
+
 namespace learnyesensmarter.Controllers
 {
     public class QuestionsController : Controller
@@ -20,10 +23,11 @@ namespace learnyesensmarter.Controllers
         /// The parameters default to null because C# requires compile-time constants.
         /// To use the default database, call QuestionsController() without paramters.
         /// </remarks>
-        public QuestionsController(IQuestionRetriever questionRetriever = null, IQuestionInserter questionInserter = null)
+        public QuestionsController(IQuestionRetriever questionRetriever = null, IQuestionInserter questionInserter = null, ICategoryRetriever categoryRetriever = null)
         {
             _questionRetriever = questionRetriever;
             _questionInserter = questionInserter;
+            _categoryRetriever = categoryRetriever;
         }
 
         /// <summary>
@@ -34,6 +38,7 @@ namespace learnyesensmarter.Controllers
             var dbproxy = new DatabaseProxy();
             _questionRetriever = dbproxy;
             _questionInserter = dbproxy;
+            _categoryRetriever = dbproxy;
         }
 
         //
@@ -52,8 +57,21 @@ namespace learnyesensmarter.Controllers
         {
             if (id < 0) return View("Error");
 
-            ViewBag.Result = _questionRetriever.Retrieve();
+            ViewBag.Result = _questionRetriever.RetrieveQuestion(id);
             return View();
+        }
+
+        //possibly refactor category related code into a category controller?
+        private ICategoryRetriever _categoryRetriever;
+
+        public int RetrieveCategoryID(string category)
+        {
+            return _categoryRetriever.RetrieveCategoryID(category);
+        }
+
+        public string RetrieveCategory(int id)
+        {
+            return _categoryRetriever.RetrieveCategory(id);
         }
 
         #endregion
@@ -62,7 +80,7 @@ namespace learnyesensmarter.Controllers
 
         private IQuestionInserter _questionInserter;
 
-        public ActionResult Insert(string question)
+        public ActionResult Insert(QuestionModel question)
         {
             ViewBag.Result = _questionInserter.Insert(question);
             return View();

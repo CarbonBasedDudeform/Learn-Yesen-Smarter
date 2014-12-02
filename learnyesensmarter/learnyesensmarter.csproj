@@ -190,9 +190,11 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
+    <Compile Include="Interfaces\IAnswerInserter.cs" />
+    <Compile Include="Interfaces\ICategoryRetriever.cs" />
     <Compile Include="Proxys\DatabaseHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\IQuestionInserter.cs" />
+    <Compile Include="Interfaces\IQuestionInserter.cs" />
     <Compile Include="Controllers\PerformController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
@@ -200,8 +202,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Controllers\IAnswerRetrieval.cs" />
-    <Compile Include="Controllers\IQuestionRetrieval.cs" />
+    <Compile Include="Interfaces\IAnswerRetriever.cs" />
+    <Compile Include="Interfaces\IQuestionRetriever.cs" />
     <Compile Include="Models\Category.cs">
       <DependentUpon>SQLModel.tt</DependentUpon>
     </Compile>

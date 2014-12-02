@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace learnyesensmarter.Controllers
+using learnyesensmarter.Models;
+
+namespace learnyesensmarter.Interfaces
 {
     public interface IQuestionInserter
     {
-        string Insert(string question);
+        string Insert(QuestionModel question);
     }
 }
