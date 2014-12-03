@@ -25,11 +25,12 @@ namespace learnyesensmarter.Controllers
         /// To use the default database, call QuestionsController() without paramters.
         /// Easiest to use by using named parameters eg. questionInserter: myQuestionInserter
         /// </remarks>
-        public QuestionsController(IQuestionRetriever questionRetriever = null, IQuestionInserter questionInserter = null, ICategoryRetriever categoryRetriever = null)
+        public QuestionsController(IQuestionRetriever questionRetriever = null, IQuestionInserter questionInserter = null, ICategoryRetriever categoryRetriever = null, ICategoryInserter categoryInserter = null)
         {
             _questionRetriever = questionRetriever;
             _questionInserter = questionInserter;
             _categoryRetriever = categoryRetriever;
+            _categoryInserter = categoryInserter;
         }
 
         /// <summary>
@@ -38,9 +39,13 @@ namespace learnyesensmarter.Controllers
         public QuestionsController()
         {
             var dbproxy = new DatabaseProxy();
+            //question interfaces
             _questionRetriever = dbproxy;
             _questionInserter = dbproxy;
+
+            //category interfaces
             _categoryRetriever = dbproxy;
+            _categoryInserter = dbproxy;
         }
 
         //
@@ -95,6 +100,13 @@ namespace learnyesensmarter.Controllers
         #endregion
 
         #region Question Insertion
+
+        private ICategoryInserter _categoryInserter;
+
+        public int InsertCategory(string name)
+        {
+            return _categoryInserter.InsertCategory(name);
+        }
 
         private IQuestionInserter _questionInserter;
 

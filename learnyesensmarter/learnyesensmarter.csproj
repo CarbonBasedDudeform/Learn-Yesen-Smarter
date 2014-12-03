@@ -191,6 +191,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Interfaces\IAnswerInserter.cs" />
+    <Compile Include="Interfaces\ICategoryInserter.cs" />
     <Compile Include="Interfaces\ICategoryRetriever.cs" />
     <Compile Include="Proxys\DatabaseHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />

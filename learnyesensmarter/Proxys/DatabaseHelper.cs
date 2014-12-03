@@ -11,8 +11,10 @@ using learnyesensmarter.Interfaces;
 
 namespace learnyesensmarter.Controllers
 {
-    public class DatabaseProxy : IQuestionInserter, IQuestionRetriever, ICategoryRetriever
+    public class DatabaseProxy : IQuestionInserter, IQuestionRetriever, ICategoryRetriever, ICategoryInserter
     {
+        #region Functions and Properties used throughout
+
         //Grabs the connection string from the config file and stores it here privately
         //so as to cache it and prevent it from being changed outside the class.
         private static string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
@@ -87,6 +89,10 @@ namespace learnyesensmarter.Controllers
             return true;
         }
 
+        #endregion
+
+        #region Categories
+
         private string _retrieveCategorySqlStatement = "select Category from Categories where CategoryID = @category_id";
         public string RetrieveCategory(int id)
         {
@@ -125,6 +131,27 @@ namespace learnyesensmarter.Controllers
 
             return -1;
         }
+
+        private string _insertCategorySqlStatement = "insert into Categories (Category) values (@category_name)";
+        const int ERROR = -1;
+        public int InsertCategory(string name)
+        {
+            int result = ERROR;
+            openConnection();
+            var sql = new SqlCommand(_insertCategorySqlStatement, _connection);
+            sql.Parameters.Add("@category_name", System.Data.SqlDbType.NVarChar);
+            sql.Parameters["@category_name"].Value = name;
+
+            TalkToDB<int>(sql, out result);
+
+            closeConnection();
+
+            return result;
+        }
+
+        #endregion
+
+        #region Questions
 
         private string _retrieveSqlStatement = "Select Question from Questions where QuestionID = @questionID";
         public string RetrieveQuestion(int id)
@@ -169,5 +196,7 @@ namespace learnyesensmarter.Controllers
 
             return result;
         }
+
+        #endregion
     }
 }

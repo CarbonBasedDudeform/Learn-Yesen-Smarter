@@ -109,11 +109,27 @@ namespace learnyesensmarter.Tests.Controllers
 
         #region Question Insertion Tests
 
-        public class DummyInserter : IQuestionInserter
+        [TestMethod]
+        public void Insert_category_identity_name()
+        {
+            DummyInserter dummy = new DummyInserter();
+            QuestionsController controller = new QuestionsController(categoryInserter: dummy);
+            int result = controller.InsertCategory("identity");
+
+            Assert.AreEqual(result, IDENTITY_ID);
+        }
+
+        public class DummyInserter : IQuestionInserter, ICategoryInserter
         {
             public string Insert(QuestionModel question)
             {
                 return question.Question;
+            }
+
+            public int InsertCategory(string name)
+            {
+                if (name == "identity") return IDENTITY_ID;
+                else return 9000;
             }
         }
 
