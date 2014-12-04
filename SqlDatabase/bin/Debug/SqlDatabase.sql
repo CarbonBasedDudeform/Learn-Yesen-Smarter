@@ -40,5 +40,14 @@ USE [$(DatabaseName)];
 
 
 GO
+PRINT N'Altering [dbo].[Questions]...';
+
+
+GO
+ALTER TABLE [dbo].[Questions]
+    ADD [QuestionType] INT NULL;
+
+
+GO
 PRINT N'Update complete.'
 GO

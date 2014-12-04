@@ -41,8 +41,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Neo4jClient">
-      <HintPath>..\packages\Neo4jClient.1.0.0.658\lib\net40\Neo4jClient.dll</HintPath>
+    <Reference Include="Neo4jClient, Version=1.0.0.661, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Neo4jClient.1.0.0.661\lib\net40\Neo4jClient.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -183,6 +184,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\AnswersController.cs" />
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -232,6 +234,7 @@
     </Compile>
     <Compile Include="Models\TaskModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proxys\GraphDBProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\SQLDatabase.mdf" />

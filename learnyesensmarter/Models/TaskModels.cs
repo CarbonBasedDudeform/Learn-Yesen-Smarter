@@ -9,10 +9,12 @@ namespace learnyesensmarter.Models
     {
     }
 
+    public enum QuestionType { REVIEW, PROS_AND_CONS, LABEL_THE_DIAGRAM, EXPLANATION, COMMAND };
     public class QuestionModel
     {
         public string Question { get; set; }
         public string Category { get; set; }
         public int CategoryID { get; set; }
+        public QuestionType QuestionType { get; set; }
     }
 }

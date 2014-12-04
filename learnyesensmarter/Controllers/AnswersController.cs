@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace learnyesensmarter.Controllers
 {
-    public class AnswersController : Controller, IAnswerRetrieval
+    public class AnswersController : Controller
     {
         //
         // GET: /Answers/
