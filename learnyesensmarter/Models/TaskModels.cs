@@ -17,4 +17,11 @@ namespace learnyesensmarter.Models
         public int CategoryID { get; set; }
         public QuestionType QuestionType { get; set; }
     }
+
+    public class AnswerModel
+    {
+        public Neo4jClient.Cypher.CypherQuery CypherQuery { get; set; }
+        public QuestionType QuestionType { get; set; }
+        public int QuestionID { get; set; }
+    }
 }
