@@ -14,7 +14,7 @@ namespace learnyesensmarter.Proxys
     {
         //server info split between string and uri class to aid readability
         private const string SERVER_ADDRESS = "http://localhost:7474/db/data";
-        private const Uri SERVER_URI = new Uri(SERVER_ADDRESS);
+        private static Uri SERVER_URI = new Uri(SERVER_ADDRESS);
         private GraphClient _client = new GraphClient(SERVER_URI);
 
         /// <summary>
