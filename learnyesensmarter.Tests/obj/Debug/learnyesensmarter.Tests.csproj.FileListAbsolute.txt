@@ -80,3 +80,6 @@ C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnye
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\obj\Debug\learnyesensmarter.Tests.csprojResolveAssemblyReference.cache
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\obj\Debug\learnyesensmarter.Tests.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\obj\Debug\learnyesensmarter.Tests.pdb
+C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Neo4jClient.dll
+C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Neo4jClient.pdb
+C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Neo4jClient.xml

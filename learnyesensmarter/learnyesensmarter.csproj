@@ -1164,6 +1164,8 @@
     <Content Include="Views\Questions\Index.cshtml" />
     <Content Include="Views\Questions\Insert.cshtml" />
     <Content Include="Scripts\version.json" />
+    <Content Include="Views\Perform\Index.cshtml" />
+    <Content Include="Views\Author\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

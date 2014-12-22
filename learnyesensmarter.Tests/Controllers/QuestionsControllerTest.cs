@@ -24,7 +24,7 @@ namespace learnyesensmarter.Tests.Controllers
             ViewResult result = controller.Index() as ViewResult;
 
             // Assert
-            Assert.IsNull(result.ViewBag.Message);
+            Assert.IsNotNull(result);
         }
 
         #region Question Retrieval Tests
