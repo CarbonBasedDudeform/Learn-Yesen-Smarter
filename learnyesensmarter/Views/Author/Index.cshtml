@@ -1,6 +1,18 @@
-﻿@{
+﻿@model learnyesensmarter.Models.TaskModels
+
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Author Tasks</h2>
+
+<section id="about_select_task_type">
+    Select which kind of task you would like to author:
+</section>
+<section id="select_task_type">
+    @foreach (var question_type in Model.TypesOfQuestions)
+    {
+        @Html.ActionLink(question_type.DisplayName, "NewTask", new {question_view_name=question_type.ViewName });
+    }
+</section>

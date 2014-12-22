@@ -1166,6 +1166,13 @@
     <Content Include="Scripts\version.json" />
     <Content Include="Views\Perform\Index.cshtml" />
     <Content Include="Views\Author\Index.cshtml" />
+    <Content Include="Views\Perform\PerformFive.cshtml" />
+    <Content Include="Views\Perform\ManualPerformance.cshtml" />
+    <Content Include="Views\Author\Review.cshtml" />
+    <Content Include="Views\Author\ProsandCons.cshtml" />
+    <Content Include="Views\Author\LabeltheDiagram.cshtml" />
+    <Content Include="Views\Author\Explanation.cshtml" />
+    <Content Include="Views\Author\Command.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

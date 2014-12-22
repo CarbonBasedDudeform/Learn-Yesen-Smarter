@@ -7,9 +7,68 @@ namespace learnyesensmarter.Models
 {
     public class TaskModels
     {
+        public List<QuestionType> TypesOfQuestions = new List<QuestionType>()
+                                              {
+                                                  new ReviewQuestion(),
+                                                  new ProsAndConsQuestion(),
+                                                  new LabelTheDiagramQuestion(),
+                                                  new ExplanationQuestion(),
+                                                  new CommandQuestion()
+                                              };
     }
 
-    public enum QuestionType { REVIEW, PROS_AND_CONS, LABEL_THE_DIAGRAM, EXPLANATION, COMMAND };
+    #region Questions
+
+    public abstract class QuestionType
+    {
+        public abstract string DisplayName { get; }
+        public abstract string ViewName { get; }
+        public abstract int ID { get; }
+    }
+
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //!!!!!!!!!!    EXTREMELY IMPORTANT THESE DON'T CHANGE AS THEY MATCH UP WITH INTS STORED IN THE DATABASE    !!!!!!!!!!!!!!!!
+    public enum QuestionTypeIDs { REVIEW, PROSANDCONS, LABELTHEDIAGRAM, EXPLANATION, COMMAND};
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    public class ReviewQuestion : QuestionType
+    {
+        public override string DisplayName { get { return "Review"; } }
+        public override string ViewName { get { return "Review"; } }
+        public override int ID { get { return (int)QuestionTypeIDs.REVIEW; } }
+    }
+
+    public class ProsAndConsQuestion : QuestionType
+    {
+        public override string DisplayName { get { return "Pros and Cons"; } }
+        public override string ViewName { get { return "ProsandCons"; } }
+        public override int ID { get { return (int)QuestionTypeIDs.PROSANDCONS; } }
+    }
+
+    public class LabelTheDiagramQuestion : QuestionType
+    {
+        public override string DisplayName { get { return "Label The Diagram"; } }
+        public override string ViewName { get { return "LabeltheDiagram"; } }
+        public override int ID { get { return (int)QuestionTypeIDs.LABELTHEDIAGRAM; } }
+    }
+
+    public class ExplanationQuestion : QuestionType
+    {
+        public override string DisplayName { get { return "Explanation"; } }
+        public override string ViewName { get { return "Explanation"; } }
+        public override int ID { get { return (int)QuestionTypeIDs.EXPLANATION; } }
+    }
+
+    public class CommandQuestion : QuestionType
+    {
+        public override string DisplayName { get { return "Command"; } }
+        public override string ViewName { get { return "Command"; } }
+        public override int ID { get { return (int)QuestionTypeIDs.COMMAND; } }
+    }
+
+    #endregion
+
     public class QuestionModel
     {
         public string Question { get; set; }
