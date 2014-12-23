@@ -5,7 +5,7 @@ using System.Web;
 
 namespace learnyesensmarter.Models
 {
-    public class TaskModels
+    public class AuthorTaskModel
     {
         public List<QuestionType> TypesOfQuestions = new List<QuestionType>()
                                               {
@@ -15,15 +15,16 @@ namespace learnyesensmarter.Models
                                                   new ExplanationQuestion(),
                                                   new CommandQuestion()
                                               };
+        public QuestionType question;
     }
 
     #region Questions
 
-    public abstract class QuestionType
+    public class QuestionType
     {
-        public abstract string DisplayName { get; }
-        public abstract string ViewName { get; }
-        public abstract int ID { get; }
+        public virtual string DisplayName { get; set; }
+        public virtual string ViewName { get; set; }
+        public virtual int ID { get; set; }
     }
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

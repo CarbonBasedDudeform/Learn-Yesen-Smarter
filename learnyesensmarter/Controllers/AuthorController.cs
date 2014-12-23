@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Helpers;
+using System.IO;
 
+using Newtonsoft.Json;
 using learnyesensmarter.Models;
 
 namespace learnyesensmarter.Controllers
@@ -15,16 +18,17 @@ namespace learnyesensmarter.Controllers
 
         public ActionResult Index()
         {
-            return View(new TaskModels());
+            return View(new AuthorTaskModel());
         }
 
-        public ActionResult NewTask(string question_view_name)
+        public ActionResult NewTask(string question)
         {
-            if (String.IsNullOrEmpty(question_view_name)) throw new Exception("Unlogged exception in AuthorController - NewTask() : Empty String");
+            //if (String.IsNullOrEmpty(question_view_name)) throw new Exception("Unlogged exception in AuthorController - NewTask() : Empty String");
 
             try
             {
-                return View(question_view_name);
+                var questionType = JsonConvert.DeserializeObject<QuestionType>(question);
+                return View(questionType.ViewName);
             }
             catch (Exception e)
             {
