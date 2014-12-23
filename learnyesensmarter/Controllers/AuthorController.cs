@@ -23,7 +23,7 @@ namespace learnyesensmarter.Controllers
 
         public ActionResult NewTask(string question)
         {
-            //if (String.IsNullOrEmpty(question_view_name)) throw new Exception("Unlogged exception in AuthorController - NewTask() : Empty String");
+            if (String.IsNullOrEmpty(question)) throw new Exception("Unlogged exception in AuthorController - NewTask() : Empty String");
 
             try
             {

@@ -20,6 +20,7 @@ C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnye
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\System.Web.WebPages.Razor.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\EntityFramework.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\System.Web.Optimization.dll
+C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Neo4jClient.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Microsoft.Web.WebPages.OAuth.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\DotNetOpenAuth.AspNet.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\DotNetOpenAuth.Core.dll
@@ -28,7 +29,6 @@ C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnye
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\DotNetOpenAuth.OpenId.RelyingParty.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\DotNetOpenAuth.OpenId.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\learnyesensmarter.pdb
-C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Newtonsoft.Json.xml
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\System.Net.Http.Formatting.xml
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\System.Web.Helpers.xml
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\System.Web.Http.xml
@@ -43,6 +43,8 @@ C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnye
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Microsoft.Data.OData.xml
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\System.Spatial.xml
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\EntityFramework.xml
+C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Neo4jClient.pdb
+C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Neo4jClient.xml
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Microsoft.Web.WebPages.OAuth.xml
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\DotNetOpenAuth.AspNet.xml
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\DotNetOpenAuth.Core.xml
@@ -80,6 +82,4 @@ C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnye
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\obj\Debug\learnyesensmarter.Tests.csprojResolveAssemblyReference.cache
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\obj\Debug\learnyesensmarter.Tests.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\obj\Debug\learnyesensmarter.Tests.pdb
-C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Neo4jClient.dll
-C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Neo4jClient.pdb
-C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Neo4jClient.xml
+C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter.Tests\bin\Debug\Newtonsoft.Json.xml

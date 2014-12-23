@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+
 using learnyesensmarter;
 using learnyesensmarter.Controllers;
 using learnyesensmarter.Models;
@@ -32,7 +34,7 @@ namespace learnyesensmarter.Tests.Controllers
         public void Author_NewTask_Returns_View()
         {
             var controller = new AuthorController();
-            ViewResult result = controller.NewTask(new CommandQuestion().ViewName) as ViewResult;
+            ViewResult result = controller.NewTask(JsonConvert.SerializeObject(new CommandQuestion())) as ViewResult;
 
             Assert.IsInstanceOfType(result, typeof(ViewResult));
         }
