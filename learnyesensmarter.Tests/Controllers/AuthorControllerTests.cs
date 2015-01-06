@@ -81,11 +81,11 @@ namespace learnyesensmarter.Tests.Controllers
             Assert.AreEqual(mock.Result, expected_question);
         }
 
-        class MockAnswerInserter : IAnswerInserter
+        class Mockdb : IAnswerInserter
         {
             public int InsertAnswer(AnswerModel answer)
             {
-                //Result = answer;
+                Result = "pass";
                 return -1;
             }
 
@@ -96,7 +96,13 @@ namespace learnyesensmarter.Tests.Controllers
         [TestMethod]
         public void Author_AuthorNewCommand_enters_answer_into_answer_db()
         {
+            var mock = new Mockdb();
+            var answerController = new AnswersController(answerInserter: mock);
+            var controller = new AuthorController(AltAnswersController: answerController);
 
+            controller.AuthorNewCommand("test prompt", "test answer");
+
+            Assert.AreEqual("pass", mock.Result);
         }
     }
 }

@@ -86,7 +86,26 @@ namespace learnyesensmarter.Controllers
                 throw new Exception("unlogged exception in AuthorNewCommand");
             }
 
-            return View("Failure");
+            return View("Success");
+        }
+
+        [HttpPost]
+        public ViewResult AuthorNewReview(string review)
+        {
+            try
+            {
+                var questionModel = new QuestionModel();
+                questionModel.Question = review;
+                questionModel.QuestionType = (int)QuestionTypeIDs.REVIEW;
+                _questionsController.Insert(questionModel);
+                //doesn't insert answer as a review task only reviews the question, there is no answer
+            }
+            catch (Exception e)
+            {
+                throw new Exception("unlogged exception in AuthorNewCommand");
+            }
+
+            return View("Success");
         }
     }
 }
