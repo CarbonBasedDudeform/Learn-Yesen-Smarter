@@ -4,3 +4,12 @@
 }
 
 <h2>Review</h2>
+
+@using (Html.BeginForm("AuthorNewReview", "Author", FormMethod.Post))
+{
+    <section>
+        <p>Write the text you want to review below</p>
+        @Html.TextArea("review");
+    </section>
+    <input type="submit" />
+}

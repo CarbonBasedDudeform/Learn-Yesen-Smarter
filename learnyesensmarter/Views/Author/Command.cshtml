@@ -4,3 +4,23 @@
 }
 
 <h2>Command</h2>
+
+@using ( Html.BeginForm("AuthorNewCommand", "Author", FormMethod.Post)) {
+    <section id="prompt">
+        <p>
+            What is the question you want to be prompted with?
+        </p>
+        <p>
+            Question: @Html.TextBox("Prompt");
+        </p>
+    </section>
+    <section id="response">
+        <p>
+            What is the command you want as the answer?
+        </p>
+        <p>
+            Command: @Html.TextBox("Answer");
+        </p>
+    </section>
+    <input type="submit" value="Submit" />
+}

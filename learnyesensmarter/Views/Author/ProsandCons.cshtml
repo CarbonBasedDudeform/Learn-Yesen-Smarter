@@ -2,5 +2,45 @@
     ViewBag.Title = "ProsandCons";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@Scripts.Render("~/bundles/jquery")
 
-<h2>ProsandCons</h2>
+<h2>Pros and Cons</h2>
+@using (Html.BeginForm("AuthorNewProsAndCons", "Author", FormMethod.Post))
+{
+    <section id="prompt">
+        <p>Enter your question below</p>
+        @Html.TextBox("prompt")
+    </section>
+    <section id="pros">
+        <p>Enter pros</p>
+        <div id="pro_texts">
+            <input type="text" />
+        </div>
+
+        <a href="#" id="addPro">+</a>
+    </section>
+    <section id="cons">
+        <p>Enter cons</p>
+        <div id="con_texts">
+            <input type="text" />
+        </div>
+
+        <a href="#" id="addCon">+</a>
+    </section>
+    
+    <input type="submit" />
+}
+
+<script>
+    $(window).ready(function () {
+        $("#addPro").click(function (e) {
+            $("#pro_texts").append("<input type='text' />");
+            e.preventDefault();
+        });
+
+        $("#addCon").click(function (e) {
+            $("#con_texts").append("<input type='text' />");
+            e.preventDefault();
+        });
+    });
+</script>

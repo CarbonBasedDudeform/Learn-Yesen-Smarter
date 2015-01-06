@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Table";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/bundles/jquery")
+
+<h2>Table</h2>
+<section id="tableCreater">
+    @using (Html.BeginForm("AuthorNewTable", "Author", FormMethod.Post))
+    {
+    <p id="controls">
+        <a href="#" id="addRowBtn">+|Add Row</a><a href="#" id="addColBtn">+|Add Column</a>
+        Fill in random fields: @Html.RadioButton("randomised", "True") [if unselected, you will have to fill in every field to perfom the task] 
+    </p>
+    <table id="userDesignedTable">
+
+    </table>
+    <input type="submit" />
+    }
+</section>
+//lets user construct a table
+//and 0 or 1 whether or not they have to fill in the full table or just "randomly" selected fields 
+        //randomly selected may mean using AI to determine which ones are best to hide, but initially will just be random
+
+<script>
+    $(window).ready(function () {
+        var numOfColumns = 1;
+        $("#addRowBtn").click(function (e) {
+            //constructs the html string for a new row, including the correct number of 'columns'
+            //columns are actually just X number of cells
+            var htmlString = "<tr>";
+            for (var i = 0; i < numOfColumns; i++) {
+                htmlString += "<td><input type='text' /></td>";
+            }
+            htmlString += "</tr>";
+            
+            $("#userDesignedTable").append(htmlString);
+        });
+
+        $("#addColBtn").click(function (e) {
+            $("#userDesignedTable tr").each(function () { $(this).append("<td><input type='text' value='new column added' /></td>"); });
+            numOfColumns++;
+        });
+    });
+</script>

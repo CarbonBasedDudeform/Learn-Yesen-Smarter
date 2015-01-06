@@ -21,6 +21,11 @@ namespace learnyesensmarter.Controllers
             return View(new AuthorTaskModel());
         }
 
+        /// <summary>
+        /// Takes a string with information about the new task and redirects to the correct view page for it.
+        /// </summary>
+        /// <param name="question">string containing a serialized QuestionType object</param>
+        /// <returns></returns>
         public ActionResult NewTask(string question)
         {
             if (String.IsNullOrEmpty(question)) throw new Exception("Unlogged exception in AuthorController - NewTask() : Empty String");
@@ -36,5 +41,12 @@ namespace learnyesensmarter.Controllers
                 //return Error View
             }
         }
+
+        [HttpPost]
+        public ActionResult AuthorNewCommand()
+        {
+            return View();
+        }
+
     }
 }

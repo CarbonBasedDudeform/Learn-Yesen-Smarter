@@ -3,4 +3,32 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+@Scripts.Render("~/bundles/jquery")
+
 <h2>Explanation</h2>
+@using (Html.BeginForm("AuthorNewExplanation", "Author", FormMethod.Post))
+{
+    <section id="prompt">
+        <p>Enter your question below</p>
+        @Html.TextBox("prompt")
+    </section>
+    <section id="points">
+        <p>Enter your explanation as bullet points below.</p>
+        <div id="points_texts">
+            <input type="text" />
+        </div>
+
+        <a href="#" id="addPoint">+</a>
+    </section>
+    
+    <input type="submit" />
+}
+
+<script>
+    $(window).ready(function () {
+        $("#addPoint").click(function (e) {
+            $("#points_texts").append("<input type='text' />");
+            e.preventDefault();
+        });
+    });
+</script>

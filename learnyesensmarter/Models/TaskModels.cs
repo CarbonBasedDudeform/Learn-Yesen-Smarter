@@ -13,7 +13,8 @@ namespace learnyesensmarter.Models
                                                   new ProsAndConsQuestion(),
                                                   new LabelTheDiagramQuestion(),
                                                   new ExplanationQuestion(),
-                                                  new CommandQuestion()
+                                                  new CommandQuestion(),
+                                                  new TableQuestion()
                                               };
         public QuestionType question;
     }
@@ -29,7 +30,7 @@ namespace learnyesensmarter.Models
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //!!!!!!!!!!    EXTREMELY IMPORTANT THESE DON'T CHANGE AS THEY MATCH UP WITH INTS STORED IN THE DATABASE    !!!!!!!!!!!!!!!!
-    public enum QuestionTypeIDs { REVIEW, PROSANDCONS, LABELTHEDIAGRAM, EXPLANATION, COMMAND};
+    public enum QuestionTypeIDs { REVIEW, PROSANDCONS, LABELTHEDIAGRAM, EXPLANATION, COMMAND, TABLE};
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -66,6 +67,13 @@ namespace learnyesensmarter.Models
         public override string DisplayName { get { return "Command"; } }
         public override string ViewName { get { return "Command"; } }
         public override int ID { get { return (int)QuestionTypeIDs.COMMAND; } }
+    }
+
+    public class TableQuestion : QuestionType
+    {
+        public override string DisplayName { get { return "Fill in the Table"; } }
+        public override string ViewName { get { return "Table"; } }
+        public override int ID { get { return (int)QuestionTypeIDs.TABLE; } }
     }
 
     #endregion

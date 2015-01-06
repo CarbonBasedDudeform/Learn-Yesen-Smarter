@@ -46,5 +46,28 @@ namespace learnyesensmarter.Tests.Controllers
             var controller = new AuthorController();
             ViewResult result = controller.NewTask(String.Empty) as ViewResult;
         }
+
+        class MockInserter : IQuestionInserter
+        {
+            public string Result = "FAIL";
+            public string Insert(QuestionModel question)
+            {
+                Result = question.Question;
+                return Result;
+            }
+        }
+
+        [TestMethod]
+        public void Author_AuthorNewCommand_enters_question_into_question_db()
+        {
+            //create mock inserter
+            MockInserter mock = new MockInserter();
+            var controller = new AuthorController();
+            string expected_question = "this is a test?";
+            ViewResult response = controller.AuthorNewCommand() as ViewResult;
+            //test to see that the controller is calling the insert method.
+            //the result field of the mock object should be the same as the given question.
+            Assert.AreEqual(mock.Result, expected_question);
+        }
     }
 }
