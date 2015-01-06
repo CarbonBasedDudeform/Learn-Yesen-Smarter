@@ -195,7 +195,7 @@
     <Compile Include="Interfaces\IAnswerInserter.cs" />
     <Compile Include="Interfaces\ICategoryInserter.cs" />
     <Compile Include="Interfaces\ICategoryRetriever.cs" />
-    <Compile Include="Proxys\DatabaseHelper.cs" />
+    <Compile Include="Proxys\DatabaseProxy.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Interfaces\IQuestionInserter.cs" />
     <Compile Include="Controllers\PerformController.cs" />
@@ -1174,6 +1174,8 @@
     <Content Include="Views\Author\Explanation.cshtml" />
     <Content Include="Views\Author\Command.cshtml" />
     <Content Include="Views\Author\Table.cshtml" />
+    <Content Include="Views\Author\Success.cshtml" />
+    <Content Include="Views\Author\Failure.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

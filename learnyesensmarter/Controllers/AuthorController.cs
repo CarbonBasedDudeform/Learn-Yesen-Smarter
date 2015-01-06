@@ -13,6 +13,20 @@ namespace learnyesensmarter.Controllers
 {
     public class AuthorController : Controller
     {
+        QuestionsController _questionsController;
+        public AuthorController()
+        {
+            _questionsController = new QuestionsController();
+        }
+
+        /// <summary>
+        /// Constructor for testing purposes or using a different QuestionsController than the default one.
+        /// </summary>
+        /// <param name="AltQuestionsController"></param>
+        public AuthorController(QuestionsController AltQuestionsController)
+        {
+            _questionsController = AltQuestionsController;
+        }
         //
         // GET: /Author/
 
@@ -43,9 +57,21 @@ namespace learnyesensmarter.Controllers
         }
 
         [HttpPost]
-        public ActionResult AuthorNewCommand()
+        public ActionResult AuthorNewCommand(string Prompt, string Answer)
         {
-            return View();
+            try
+            {
+                QuestionModel model = new QuestionModel();
+                model.Question = Prompt;
+                model.QuestionType = (int)QuestionTypeIDs.COMMAND;
+                _questionsController.Insert(model);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("unlogged exception in AuthorNewCommand");
+            }
+
+            return View("Failure");
         }
 
     }

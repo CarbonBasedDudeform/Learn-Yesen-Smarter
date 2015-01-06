@@ -81,9 +81,14 @@ namespace learnyesensmarter.Models
     public class QuestionModel
     {
         public string Question { get; set; }
+        public int QuestionType { get; set; }
+    }
+
+    public class CategoryModel
+    {
         public string Category { get; set; }
         public int CategoryID { get; set; }
-        public QuestionType QuestionType { get; set; }
+        public int QuestionID { get; set; }
     }
 
     public class AnswerModel

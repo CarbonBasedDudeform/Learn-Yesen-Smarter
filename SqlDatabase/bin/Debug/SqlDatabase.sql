@@ -15,8 +15,8 @@ SET NUMERIC_ROUNDABORT OFF;
 GO
 :setvar DatabaseName "SqlDatabase"
 :setvar DefaultFilePrefix "SqlDatabase"
-:setvar DefaultDataPath "C:\Users\Dom\AppData\Local\Microsoft\VisualStudio\SSDT\v11.0\learnyesensmarter\"
-:setvar DefaultLogPath "C:\Users\Dom\AppData\Local\Microsoft\VisualStudio\SSDT\v11.0\learnyesensmarter\"
+:setvar DefaultDataPath "C:\Users\Dom\AppData\Local\Microsoft\VisualStudio\SSDT\learnyesensmarter"
+:setvar DefaultLogPath "C:\Users\Dom\AppData\Local\Microsoft\VisualStudio\SSDT\learnyesensmarter"
 
 GO
 :on error exit
@@ -44,10 +44,11 @@ PRINT N'Altering [dbo].[Questions]...';
 
 
 GO
-ALTER TABLE [dbo].[Questions]
-    ADD [QuestionType] INT NULL;
+ALTER TABLE [dbo].[Questions] ALTER COLUMN [CategoryID] INT NULL;
 
 
 GO
-PRINT N'Update complete.'
+PRINT N'Update complete.';
+
+
 GO

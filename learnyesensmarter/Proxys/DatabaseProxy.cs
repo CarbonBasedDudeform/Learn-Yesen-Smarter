@@ -13,13 +13,21 @@ namespace learnyesensmarter.Controllers
 {
     public class DatabaseProxy : IQuestionInserter, IQuestionRetriever, ICategoryRetriever, ICategoryInserter
     {
-        #region Functions and Properties used throughout
-
+        #region Constructors and Properties
+        
         //Grabs the connection string from the config file and stores it here privately
         //so as to cache it and prevent it from being changed outside the class.
-        private static string _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private string _connectionString;
 
         private static SqlConnection _connection = null;
+
+        public DatabaseProxy()
+        {
+            _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        }
+        #endregion
+
+        #region Functions used throughout
 
         /// <summary>
         /// Opens a connection to the database.
@@ -171,7 +179,7 @@ namespace learnyesensmarter.Controllers
             return result;
         }
 
-        private string _insertSqlStatement = "insert into Questions (Question, CategoryID) values (@users_question, @category_id)";
+        private string _insertSqlStatement = "insert into Questions (Question) values (@users_question)";
         private const int LOWEST_CATEGORY_ID = 1;
         public string Insert(QuestionModel user_question)
         {
@@ -181,15 +189,7 @@ namespace learnyesensmarter.Controllers
 
             sql.Parameters.Add("@users_question", System.Data.SqlDbType.NVarChar);
             sql.Parameters["@users_question"].Value = user_question.Question;
-            //check if the category ID is set
-            if (user_question.CategoryID < LOWEST_CATEGORY_ID)
-            {
-                //if it is not set then get it from the DB
-                user_question.CategoryID = RetrieveCategoryID(user_question.Category);
-            }
-            sql.Parameters.Add("@category_id", System.Data.SqlDbType.Int);
-            sql.Parameters["@category_id"].Value = user_question.CategoryID;
-
+            
             TalkToDB<string>(sql, out result);
 
             closeConnection();

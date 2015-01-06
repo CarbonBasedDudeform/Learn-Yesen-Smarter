@@ -8,7 +8,7 @@ using learnyesensmarter.Models;
 
 namespace learnyesensmarter.Interfaces
 {
-    interface IAnswerInserter
+    public interface IAnswerInserter
     {
         int InsertAnswer(AnswerModel answers);
     }

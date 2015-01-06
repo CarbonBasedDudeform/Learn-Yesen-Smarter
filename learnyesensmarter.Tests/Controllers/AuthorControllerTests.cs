@@ -16,12 +16,26 @@ namespace learnyesensmarter.Tests.Controllers
     [TestClass]
     public class AuthorControllerTest
     {
+        class MockInserter : IQuestionInserter
+        {
+            public string Result = "FAIL";
+            public string Insert(QuestionModel question)
+            {
+                Result = question.Question;
+                return Result;
+            }
+        }
+
+
         //the point of these tests is to just ensure they are returning a view as expected.
         [TestMethod]
         public void Author_Index_Returns_View()
         {
             // Arrange
-            var controller = new AuthorController();
+            //create mock inserter
+            MockInserter mock = new MockInserter(); //used throughout to force the authorcontroller to use the testing version of questioncontroller, otherwise exceptions are thrown
+            QuestionsController qc = new QuestionsController(questionInserter: mock);
+            var controller = new AuthorController(qc);
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
@@ -33,7 +47,10 @@ namespace learnyesensmarter.Tests.Controllers
         [TestMethod]
         public void Author_NewTask_Returns_View()
         {
-            var controller = new AuthorController();
+            //create mock inserter
+            MockInserter mock = new MockInserter();
+            QuestionsController qc = new QuestionsController(questionInserter: mock);
+            var controller = new AuthorController(qc);
             ViewResult result = controller.NewTask(JsonConvert.SerializeObject(new CommandQuestion())) as ViewResult;
 
             Assert.IsInstanceOfType(result, typeof(ViewResult));
@@ -43,18 +60,11 @@ namespace learnyesensmarter.Tests.Controllers
         [ExpectedException(typeof(Exception), "An empty string was inappropriately allowed.")]
         public void Author_NewTask_Empty_string_throws_exception()
         {
-            var controller = new AuthorController();
+            //create mock inserter
+            MockInserter mock = new MockInserter();
+            QuestionsController qc = new QuestionsController(questionInserter: mock);
+            var controller = new AuthorController(qc);
             ViewResult result = controller.NewTask(String.Empty) as ViewResult;
-        }
-
-        class MockInserter : IQuestionInserter
-        {
-            public string Result = "FAIL";
-            public string Insert(QuestionModel question)
-            {
-                Result = question.Question;
-                return Result;
-            }
         }
 
         [TestMethod]
@@ -62,12 +72,31 @@ namespace learnyesensmarter.Tests.Controllers
         {
             //create mock inserter
             MockInserter mock = new MockInserter();
-            var controller = new AuthorController();
+            QuestionsController qc = new QuestionsController(questionInserter: mock);
+            var controller = new AuthorController(qc);
             string expected_question = "this is a test?";
-            ViewResult response = controller.AuthorNewCommand() as ViewResult;
+            ViewResult response = controller.AuthorNewCommand(expected_question, "could be anything, null, test, ear elephant") as ViewResult;
             //test to see that the controller is calling the insert method.
             //the result field of the mock object should be the same as the given question.
             Assert.AreEqual(mock.Result, expected_question);
+        }
+
+        class MockAnswerInserter : IAnswerInserter
+        {
+            public int InsertAnswer(AnswerModel answer)
+            {
+                //Result = answer;
+                return -1;
+            }
+
+            public string Result = "";
+        }
+
+
+        [TestMethod]
+        public void Author_AuthorNewCommand_enters_answer_into_answer_db()
+        {
+
         }
     }
 }
