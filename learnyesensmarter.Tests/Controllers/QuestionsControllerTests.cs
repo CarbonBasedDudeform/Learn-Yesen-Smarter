@@ -12,7 +12,7 @@ using learnyesensmarter.Interfaces;
 namespace learnyesensmarter.Tests.Controllers
 {
     [TestClass]
-    public class QuestionsControllerTest
+    public class QuestionsControllerTests
     {
         [TestMethod]
         public void Index()
@@ -121,9 +121,9 @@ namespace learnyesensmarter.Tests.Controllers
 
         public class DummyInserter : IQuestionInserter, ICategoryInserter
         {
-            public string Insert(QuestionModel question)
+            public int Insert(QuestionModel question)
             {
-                return question.Question;
+                return question.Question.Length;
             }
 
             public int InsertCategory(string name)
@@ -146,9 +146,9 @@ namespace learnyesensmarter.Tests.Controllers
             question.Question = "this is a question?";
 
             //Act
-            ViewResult result = controller.Insert(question) as ViewResult; 
+            int result = controller.Insert(question); 
             
-            Assert.AreEqual(dummy.Insert(question), result.ViewBag.Result);
+            Assert.AreEqual(question.Question.Length, result);
         }
 
         #endregion

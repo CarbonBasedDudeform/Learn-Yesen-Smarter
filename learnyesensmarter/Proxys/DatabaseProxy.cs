@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 using learnyesensmarter.Models;
 using learnyesensmarter.Interfaces;
 
-namespace learnyesensmarter.Controllers
+namespace learnyesensmarter.Proxys
 {
     public class DatabaseProxy : IQuestionInserter, IQuestionRetriever, ICategoryRetriever, ICategoryInserter
     {
@@ -179,22 +179,25 @@ namespace learnyesensmarter.Controllers
             return result;
         }
 
-        private string _insertSqlStatement = "insert into Questions (Question) values (@users_question)";
+        private string _insertSqlStatement = "insert into Questions (Question, QuestionType) values (@users_question, @users_question_type); select scope_identity()";
         private const int LOWEST_CATEGORY_ID = 1;
-        public string Insert(QuestionModel user_question)
+        public int Insert(QuestionModel user_question)
         {
             openConnection();
-            string result = "";
             var sql = new SqlCommand(_insertSqlStatement, _connection);
 
             sql.Parameters.Add("@users_question", System.Data.SqlDbType.NVarChar);
             sql.Parameters["@users_question"].Value = user_question.Question;
-            
-            TalkToDB<string>(sql, out result);
+
+            sql.Parameters.Add("@users_question_type", System.Data.SqlDbType.Int);
+            sql.Parameters["@users_question_type"].Value = user_question.QuestionType;
+
+            decimal result = 0;
+            TalkToDB<decimal>(sql, out result);
 
             closeConnection();
 
-            return result;
+            return (int)result;
         }
 
         #endregion

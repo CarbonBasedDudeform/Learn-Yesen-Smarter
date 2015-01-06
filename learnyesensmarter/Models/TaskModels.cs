@@ -94,7 +94,13 @@ namespace learnyesensmarter.Models
     public class AnswerModel
     {
         public Neo4jClient.Cypher.CypherQuery CypherQuery { get; set; }
-        public QuestionType QuestionType { get; set; }
+        public int QuestionType { get; set; }
         public int QuestionID { get; set; }
+    }
+
+    public class GraphDBCommandAnswerModel
+    {
+        public int QuestionID { get; set; }
+        public string Question { get; set; }
     }
 }

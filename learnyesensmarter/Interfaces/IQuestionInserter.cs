@@ -9,6 +9,6 @@ namespace learnyesensmarter.Interfaces
 {
     public interface IQuestionInserter
     {
-        string Insert(QuestionModel question);
+        int Insert(QuestionModel question);
     }
 }

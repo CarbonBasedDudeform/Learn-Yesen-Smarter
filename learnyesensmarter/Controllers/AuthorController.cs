@@ -14,18 +14,21 @@ namespace learnyesensmarter.Controllers
     public class AuthorController : Controller
     {
         QuestionsController _questionsController;
+        AnswersController _answersController;
         public AuthorController()
         {
             _questionsController = new QuestionsController();
+            _answersController = new AnswersController();
         }
 
         /// <summary>
         /// Constructor for testing purposes or using a different QuestionsController than the default one.
         /// </summary>
         /// <param name="AltQuestionsController"></param>
-        public AuthorController(QuestionsController AltQuestionsController)
+        public AuthorController(QuestionsController AltQuestionsController = null, AnswersController AltAnswersController = null)
         {
             _questionsController = AltQuestionsController;
+            _answersController = AltAnswersController;
         }
         //
         // GET: /Author/
@@ -61,10 +64,22 @@ namespace learnyesensmarter.Controllers
         {
             try
             {
-                QuestionModel model = new QuestionModel();
-                model.Question = Prompt;
-                model.QuestionType = (int)QuestionTypeIDs.COMMAND;
-                _questionsController.Insert(model);
+                var questionModel = new QuestionModel();
+                questionModel.Question = Prompt;
+                questionModel.QuestionType = (int)QuestionTypeIDs.COMMAND;
+                int questionID = _questionsController.Insert(questionModel);
+                var answerModel = new AnswerModel();
+                answerModel.QuestionType = questionModel.QuestionType;
+                answerModel.QuestionID = questionID;
+
+                //setup Cypher Query
+                var parameters = new Dictionary<string, object>();
+                parameters.Add("qID", questionID);
+                parameters.Add("ans", Answer);
+
+                answerModel.CypherQuery = new Neo4jClient.Cypher.CypherQuery("create (a:Answer{ questionID: {qID}, Answer: {ans}  })", parameters, Neo4jClient.Cypher.CypherResultMode.Projection);
+                                                                 
+                _answersController.Insert(answerModel);
             }
             catch (Exception e)
             {
@@ -73,6 +88,5 @@ namespace learnyesensmarter.Controllers
 
             return View("Failure");
         }
-
     }
 }

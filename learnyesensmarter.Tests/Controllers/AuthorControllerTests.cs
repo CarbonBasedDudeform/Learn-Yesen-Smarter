@@ -19,10 +19,10 @@ namespace learnyesensmarter.Tests.Controllers
         class MockInserter : IQuestionInserter
         {
             public string Result = "FAIL";
-            public string Insert(QuestionModel question)
+            public int Insert(QuestionModel question)
             {
                 Result = question.Question;
-                return Result;
+                return -1;
             }
         }
 

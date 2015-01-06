@@ -3,7 +3,3 @@ C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\SqlData
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\SqlDatabase\bin\Debug\SqlDatabase.pdb
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\SqlDatabase\obj\Debug\SqlDatabase.dll
 C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\SqlDatabase\obj\Debug\SqlDatabase.pdb
-C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\SqlDatabase\obj\Debug\Model.xml
-C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\SqlDatabase\obj\Debug\refactor.xml
-C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\SqlDatabase\obj\Debug\postdeploy.sql
-C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\SqlDatabase\obj\Debug\predeploy.sql

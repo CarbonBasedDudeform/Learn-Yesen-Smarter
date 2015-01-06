@@ -10,7 +10,7 @@ using learnyesensmarter.Controllers;
 namespace learnyesensmarter.Tests.Controllers
 {
     [TestClass]
-    public class HomeControllerTest
+    public class HomeControllerTests
     {
         [TestMethod]
         public void Index()

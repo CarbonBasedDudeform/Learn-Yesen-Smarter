@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+using System.Net.Http;
+using System.Net.Http.Headers;
+
 using Neo4jClient;
+using Newtonsoft.Json;
 
 using learnyesensmarter.Interfaces;
 using learnyesensmarter.Models;
@@ -36,7 +40,6 @@ namespace learnyesensmarter.Proxys
 
         public AnswerModel RetrieveAnswer(int question_id)
         {
-            _client.Connect();
             return null; //not implemented
         }
     }

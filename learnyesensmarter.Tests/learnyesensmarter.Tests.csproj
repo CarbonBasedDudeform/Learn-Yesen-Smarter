@@ -114,11 +114,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\QuestionsControllerTest.cs" />
+    <Compile Include="Controllers\QuestionsControllerTests.cs" />
     <Compile Include="Controllers\PerformControllerTests.cs" />
     <Compile Include="Controllers\AuthorControllerTests.cs" />
+    <Compile Include="Controllers\AnswersConstollerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Controllers\HomeControllerTest.cs" />
+    <Compile Include="Controllers\HomeControllerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />

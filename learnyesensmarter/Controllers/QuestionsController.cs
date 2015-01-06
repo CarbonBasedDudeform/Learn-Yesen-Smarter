@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 using learnyesensmarter.Models;
 using learnyesensmarter.Interfaces;
+using learnyesensmarter.Proxys;
 
 namespace learnyesensmarter.Controllers
 {
@@ -115,10 +116,9 @@ namespace learnyesensmarter.Controllers
         /// </summary>
         /// <param name="question">Model of a question including the string representation of the question, the category ID, and the category name </param>
         /// <returns>The View</returns>
-        public ActionResult Insert(QuestionModel question)
+        public int Insert(QuestionModel question)
         {
-            ViewBag.Result = _questionInserter.Insert(question);
-            return View();
+            return _questionInserter.Insert(question);
         }
 
         #endregion
