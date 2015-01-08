@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Newtonsoft.Json;
+using Neo4jClient;
 
 using learnyesensmarter;
 using learnyesensmarter.Controllers;
@@ -85,7 +87,7 @@ namespace learnyesensmarter.Tests.Controllers
         {
             public int InsertAnswer(AnswerModel answer)
             {
-                Result = "pass";
+                Result += answer.CypherQuery.QueryText;
                 return -1;
             }
 
@@ -103,6 +105,23 @@ namespace learnyesensmarter.Tests.Controllers
             controller.AuthorNewCommand("test prompt", "test answer");
 
             Assert.AreEqual("pass", mock.Result);
+        }
+
+        //should output the correct cypher query for the pros+cons in that format
+        [TestMethod]
+        public void Author_AuthorNewProsAndCons_ouputs_correct_cypher()
+        {
+            var mock = new Mockdb();
+            var answerController = new AnswersController(answerInserter: mock);
+            var controller = new AuthorController(AltAnswersController: answerController);
+
+            string pros = "cat, sat, mat -SEPARATOR- dog, slept, floor";
+            string cons = "mouse, run up, tree -SEPARATOR- kangaroo, jumps";
+            controller.AuthorNewProsAndCons("test prompt", pros, cons);
+
+            string expected_cypher_query = "";
+
+            Assert.AreEqual(expected_cypher_query, mock.Result);
         }
     }
 }

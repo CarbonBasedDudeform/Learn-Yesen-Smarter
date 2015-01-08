@@ -14,33 +14,58 @@
     <section id="pros">
         <p>Enter pros</p>
         <div id="pro_texts">
-            <input type="text" />
         </div>
 
-        <a href="#" id="addPro">+</a>
+        <a href="#" id="addPro">+|Add a Pro</a>
+        @Html.Hidden("collatedPros");
     </section>
     <section id="cons">
         <p>Enter cons</p>
         <div id="con_texts">
-            <input type="text" />
         </div>
 
-        <a href="#" id="addCon">+</a>
+        <a href="#" id="addCon">+|Add a Con</a>
+
+        @Html.Hidden("collatedCons");
     </section>
     
-    <input type="submit" />
+    <input type="submit" id="submitBtn" />
 }
 
 <script>
     $(window).ready(function () {
+        var proID = 0;
         $("#addPro").click(function (e) {
-            $("#pro_texts").append("<input type='text' />");
+            $("#pro_texts").append("<input type='text' name='pro" + proID + "' />");
+            proID++;
+
             e.preventDefault();
         });
 
+        var conID = 0;
         $("#addCon").click(function (e) {
-            $("#con_texts").append("<input type='text' />");
+            $("#con_texts").append("<input type='text' name='con" + conID + "' />");
+            conID++;
+
             e.preventDefault();
+        });
+
+        $("#submitBtn").click(function (e) {
+            //create json object
+            var prompt = $("input:text[name=prompt]").val();
+            var pros = "";
+            var cons = "";
+
+            for (var i = 0; i < proID; i++) {
+                pros += $("input:text[name=pro" + i + "]").val() + " -SEPERATOR- ";
+            }
+
+            for (var i = 0; i < conID; i++) {
+                cons += $("input:text[name=con" + i + "]").val() + " -SEPERATOR- ";
+            }
+
+            $("input:hidden[name=collatedPros]").val(pros);
+            $("input:hidden[name=collatedCons]").val(cons);
         });
     });
 </script>
