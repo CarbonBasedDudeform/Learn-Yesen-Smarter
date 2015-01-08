@@ -52,6 +52,7 @@ namespace learnyesensmarter.Controllers
             try
             {
                 var questionType = JsonConvert.DeserializeObject<QuestionType>(question);
+                ViewBag.Separator = SEPARATOR;
                 return View(questionType.ViewName);
             }
             catch (Exception e)
@@ -114,6 +115,9 @@ namespace learnyesensmarter.Controllers
             return View("Success");
         }
 
+        //this is used throughout in the insert answer sections to separate answers that have been collated together into one string
+        private const string SEPARATOR = " -SEPARATOR- ";
+
         [HttpPost]
         public ViewResult AuthorNewProsAndCons(string Prompt, string collatedPros, string collatedCons)
         {
@@ -126,9 +130,9 @@ namespace learnyesensmarter.Controllers
                 int questionID = _questionsController.Insert(questionModel);
                 
                 //insert the answer
-                string[] pros = Regex.Split(collatedPros, " -SEPARATOR- "); //uses regex to split the collated pros into seperate pros
+                string[] pros = Regex.Split(collatedPros, SEPARATOR); //uses regex to split the collated pros into seperate pros
                                                                             //!IMPORTANT!: Leaves an empty string in last place of array
-                string[] cons = Regex.Split(collatedCons, " -SEPARATOR- ");
+                string[] cons = Regex.Split(collatedCons, SEPARATOR);
 
                 var answerModel = new AnswerModel();
                 answerModel.QuestionType = questionModel.QuestionType;
@@ -206,9 +210,73 @@ namespace learnyesensmarter.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("unlogged exception in AuthorNewCommand");
+                throw new Exception("unlogged exception in AuthorNewCommand: " + e.Message);
             }
 
+            return View("Success");
+        }
+
+        [HttpPost]
+        public ViewResult AuthorNewExplanation(string Prompt, string collatedAnswers)
+        {
+            try
+            {
+                //insert the question
+                var questionModel = new QuestionModel();
+                questionModel.Question = Prompt;
+                questionModel.QuestionType = (int)QuestionTypeIDs.EXPLANATION;
+                int questionID = _questionsController.Insert(questionModel);
+
+                //insert the answer
+                string[] answers = Regex.Split(collatedAnswers, SEPARATOR);
+
+                var answerModel = new AnswerModel();
+                answerModel.QuestionType = questionModel.QuestionType;
+                answerModel.QuestionID = questionID;
+
+
+                var parameters = new Dictionary<string, object>();
+                parameters["qID"] = questionID; //this is done here because it is the same for all nodes for this answer.
+                parameters["totalSub"] = answers.Length - 1; //-1 to account for the empty string at the end which is not inserted into the db
+
+                //Note: Cypher Query is creating a relationship in a direction but the match query for this type of question ignores this relationship
+                //It is only done because Neo4j requires it.
+
+                //first construct the query for creating the pros.
+                //answers for this type of question contain the question id and then a sub id and the total number of sub ids, as well as the answer
+                //the sub id indicates the number, for example, of pros. If the users supplies 5 pros then this constructs a relationship of key words for each 
+                string expanationQuery = "create ";
+                for (int i = 0; i < (answers.Length - 1); i++) //-1 to account for blank space at the end
+                {
+                    //seperate the answer based on comma -- this assumes the user supplies a comma seperated list of keywords and allows for key phrases as well, eg. "fluffy cat, sat, soft mat" 
+                    var current = answers[i].Split(',');
+                    //these properties stay the same for all nodes in this sentence
+                    parameters["subID"] = i;
+
+                    for (int j = 0; j < current.Length; j++)
+                    {
+                        //these properties change with each node
+                        parameters["ans" + j] = current[j];
+
+                        expanationQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans" + j + "} })";
+
+                        //if there are more to come, then add the PRO relation, otherwise ^^ is the terminating node.
+                        if ((j + 1) < current.Length)
+                        {
+                            expanationQuery += "-[:EXPLANATION]->";
+                        }
+                    }
+
+                    answerModel.CypherQuery = new Neo4jClient.Cypher.CypherQuery(expanationQuery, parameters, Neo4jClient.Cypher.CypherResultMode.Projection);
+                    _answersController.Insert(answerModel);
+                    //reset the query to it's original state
+                    expanationQuery = "create ";
+                } 
+            }
+            catch (Exception e)
+            {
+                throw new Exception("unlogged exception in AuthorNewExplanation: " + e.Message);
+            }
             return View("Success");
         }
     }

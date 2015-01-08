@@ -52,16 +52,14 @@
 
         $("#submitBtn").click(function (e) {
             //create json object
-            var prompt = $("input:text[name=prompt]").val();
             var pros = "";
-            var cons = "";
-
             for (var i = 0; i < proID; i++) {
-                pros += $("input:text[name=pro" + i + "]").val() + " -SEPERATOR- ";
+                pros += $("input:text[name=pro" + i + "]").val() + " -SEPARATOR- ";
             }
 
+            var cons = "";
             for (var i = 0; i < conID; i++) {
-                cons += $("input:text[name=con" + i + "]").val() + " -SEPERATOR- ";
+                cons += $("input:text[name=con" + i + "]").val() + " -SEPARATOR- ";
             }
 
             $("input:hidden[name=collatedPros]").val(pros);

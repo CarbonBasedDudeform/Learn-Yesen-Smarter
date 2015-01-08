@@ -112,16 +112,31 @@ namespace learnyesensmarter.Tests.Controllers
         public void Author_AuthorNewProsAndCons_ouputs_correct_cypher()
         {
             var mock = new Mockdb();
+            var inserter_mock = new MockInserter();
             var answerController = new AnswersController(answerInserter: mock);
-            var controller = new AuthorController(AltAnswersController: answerController);
+            var questionsController = new QuestionsController(questionInserter: inserter_mock);
+            var controller = new AuthorController(AltAnswersController: answerController, AltQuestionsController: questionsController);
 
             string pros = "cat, sat, mat -SEPARATOR- dog, slept, floor";
             string cons = "mouse, run up, tree -SEPARATOR- kangaroo, jumps";
             controller.AuthorNewProsAndCons("test prompt", pros, cons);
 
-            string expected_cypher_query = "";
+            string expected_cypher_query = "create (:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans0} })-[:PRO]->(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans1} })-[:PRO]->(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans2} })"
+                                         + "create (:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans0} })-[:PRO]->(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans1} })-[:PRO]->(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans2} })"
+                                         + "create (:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans0} })-[:CON]->(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans1} })-[:CON]->(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans2} })"
+                                         + "create (:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans0} })-[:CON]->(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans1} })";
 
             Assert.AreEqual(expected_cypher_query, mock.Result);
+        }
+
+        [TestMethod]
+        public void Author_AuthorNewExplanation_outputs_correct_cypher()
+        {
+        }
+
+        [TestMethod]
+        public void Author_AuthorNewExplanation_inserts_correct_prompt()
+        {
         }
     }
 }

@@ -15,20 +15,33 @@
     <section id="points">
         <p>Enter your explanation as bullet points below.</p>
         <div id="points_texts">
-            <input type="text" />
         </div>
 
         <a href="#" id="addPoint">+</a>
     </section>
-    
-    <input type="submit" />
+    @Html.Hidden("collatedAnswers");
+    <input type="submit" id="submitBtn"/>
 }
 
 <script>
     $(window).ready(function () {
+        var pointID = 0;
         $("#addPoint").click(function (e) {
-            $("#points_texts").append("<input type='text' />");
+            $("#points_texts").append("<input type='text' name='point" + pointID + "' />");
+            pointID++;
+
             e.preventDefault();
+        });
+
+
+        $("#submitBtn").click(function (e) {
+            //create json object
+            var ans = "";
+            for (var i = 0; i < pointID; i++) {
+                ans += $("input:text[name=point" + i + "]").val() + "@ViewBag.Separator";
+            }
+
+            $("input:hidden[name=collatedAnswers]").val(ans);
         });
     });
 </script>
