@@ -103,4 +103,11 @@ namespace learnyesensmarter.Models
         public int QuestionID { get; set; }
         public string Question { get; set; }
     }
+
+    public class GridModel
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+        public string Val { get; set; }
+    }
 }

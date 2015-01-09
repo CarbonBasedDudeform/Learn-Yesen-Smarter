@@ -9,6 +9,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 using learnyesensmarter.Models;
 
 namespace learnyesensmarter.Controllers
@@ -141,7 +143,7 @@ namespace learnyesensmarter.Controllers
                 //setup Cypher Query
                 var parameters = new Dictionary<string, object>();
                 parameters["qID"] = questionID; //this is done here because it is the same for all nodes for this answer.
-                parameters["totalSub"] = pros.Length-1; //-1 to account for the empty string at the end which is not inserted into the db
+                parameters["totalSubs"] = pros.Length-1; //-1 to account for the empty string at the end which is not inserted into the db
 
                 //Note: Cypher Query is creating a relationship in a direction but the match query for this type of question ignores this relationship
                       //It is only done because Neo4j requires it.
@@ -162,7 +164,7 @@ namespace learnyesensmarter.Controllers
                         //these properties change with each node
                         parameters["ans"+j] = current[j];
 
-                        prosQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans"+j+"} })";
+                        prosQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSubs}, Answer: {ans"+j+"} })";
 
                         //if there are more to come, then add the PRO relation, otherwise ^^ is the terminating node.
                         if ((j + 1) < current.Length)
@@ -178,7 +180,7 @@ namespace learnyesensmarter.Controllers
                 }                
 
                 //repeat the same for the cons
-                parameters["totalSub"] = cons.Length - 1; //-1 for blank space at end
+                parameters["totalSubs"] = cons.Length - 1; //-1 for blank space at end
                 string consQuery = "create";
                 for (int i = 0; i < (cons.Length-1); i++) //-1 to account for blank space at the end
                 {
@@ -192,7 +194,7 @@ namespace learnyesensmarter.Controllers
                         //these properties change with each node
                         parameters["ans"+j] = current[j];
 
-                        consQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans" + j + "} })";
+                        consQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSubs}, Answer: {ans" + j + "} })";
 
                         //if there are more to come, then add the PRO relation, otherwise ^^ is the terminating node.
                         if ((j + 1) < current.Length)
@@ -237,7 +239,7 @@ namespace learnyesensmarter.Controllers
 
                 var parameters = new Dictionary<string, object>();
                 parameters["qID"] = questionID; //this is done here because it is the same for all nodes for this answer.
-                parameters["totalSub"] = answers.Length - 1; //-1 to account for the empty string at the end which is not inserted into the db
+                parameters["totalSubs"] = answers.Length - 1; //-1 to account for the empty string at the end which is not inserted into the db
 
                 //Note: Cypher Query is creating a relationship in a direction but the match query for this type of question ignores this relationship
                 //It is only done because Neo4j requires it.
@@ -250,7 +252,7 @@ namespace learnyesensmarter.Controllers
                 {
                     //seperate the answer based on comma -- this assumes the user supplies a comma seperated list of keywords and allows for key phrases as well, eg. "fluffy cat, sat, soft mat" 
                     var current = answers[i].Split(',');
-                    //these properties stay the same for all nodes in this sentence
+                    //these properties stay the same for all nodes in this segment
                     parameters["subID"] = i;
 
                     for (int j = 0; j < current.Length; j++)
@@ -258,7 +260,7 @@ namespace learnyesensmarter.Controllers
                         //these properties change with each node
                         parameters["ans" + j] = current[j];
 
-                        expanationQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSub}, Answer: {ans" + j + "} })";
+                        expanationQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSubs}, Answer: {ans" + j + "} })";
 
                         //if there are more to come, then add the PRO relation, otherwise ^^ is the terminating node.
                         if ((j + 1) < current.Length)
@@ -277,6 +279,63 @@ namespace learnyesensmarter.Controllers
             {
                 throw new Exception("unlogged exception in AuthorNewExplanation: " + e.Message);
             }
+            return View("Success");
+        }
+
+        [HttpPost]
+        public ViewResult AuthorNewTable(string prompt, string randomised, string collatedTable, string numberOfRows, string numberOfCols)
+        {
+            try
+            {
+                //insert the question
+                var questionModel = new QuestionModel();
+                questionModel.Question = prompt;
+                questionModel.QuestionType = (int)QuestionTypeIDs.TABLE;
+                int questionID = _questionsController.Insert(questionModel);
+
+                //insert the answer
+                GridModel[] Answers = JsonConvert.DeserializeObject<GridModel[]>(collatedTable);
+                var answerModel = new AnswerModel();
+                answerModel.QuestionType = questionModel.QuestionType;
+                answerModel.QuestionID = questionID;
+
+
+                var parameters = new Dictionary<string, object>();
+                parameters["qID"] = questionID; //this is done here because it is the same for all nodes for this answer.
+                parameters["totalSubs"] = Answers.Length; //-1 to account for the empty string at the end which is not inserted into the db
+                parameters["totalRows"] = Int32.Parse(numberOfRows);
+                parameters["totalCols"] = Int32.Parse(numberOfCols);
+
+                string tableQuery = "create ";
+                for (int i = 0; i < Answers.Length; i++)
+                {
+                    //these properties stay the same for all nodes in this segment
+                    /*
+                     * necessary to tag each variable with i to differentiate between the nodes. Other versions of inserting the answer haven't needed this
+                     * because they execute the query at the end of the for loop, this, however, executes the query after the for loop so if i isn't added
+                     * then all the nodes end up with the same value (the last set value)
+                     */
+                    parameters["subID"+i] = i;
+                    parameters["ans"+i] = Answers[i].Val; //
+                    parameters["x"+i] = Answers[i].X;
+                    parameters["y"+i] = Answers[i].Y;
+
+                    tableQuery += "(:Answer { questionID: {qID}, subID: {subID" + i + "}, totalSubs: {totalSubs}, Answer: {ans" + i + "}, X: {x" + i + "}, Y: {y" + i + "}, totalRows: {totalRows}, totalCols: {totalCols} })";
+
+                    if ((i + 1) < Answers.Length)
+                    {
+                        tableQuery += "-[:TABLE]->";
+                    }
+                }
+
+                answerModel.CypherQuery = new Neo4jClient.Cypher.CypherQuery(tableQuery, parameters, Neo4jClient.Cypher.CypherResultMode.Projection);
+                _answersController.Insert(answerModel);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("unlogged exception in AuthorNewTable: " + e.Message);
+            }
+
             return View("Success");
         }
     }
