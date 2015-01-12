@@ -110,4 +110,14 @@ namespace learnyesensmarter.Models
         public int Y { get; set; }
         public string Val { get; set; }
     }
+
+    public class RetrieveTableAnswerModel
+    {
+        public string Answer {get;set;}
+        public int questionID {get;set;}
+        public int subID {get;set;}
+        public int totalSubs {get;set;}
+        public int Y {get; set;}
+        public int X {get; set;}
+    }
 }

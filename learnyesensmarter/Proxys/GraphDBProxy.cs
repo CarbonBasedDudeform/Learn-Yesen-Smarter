@@ -38,9 +38,22 @@ namespace learnyesensmarter.Proxys
             return answer.QuestionID;
         }
 
-        public AnswerModel RetrieveAnswer(int question_id)
+        /// <summary>
+        /// Retrieves the answers from the Graph Database
+        /// </summary>
+        /// <typeparam name="T">The Answer Model the graph nodes should bind to.</typeparam>
+        /// <param name="question_id">The ID of the Question Associated with the Answer</param>
+        /// <returns>JSON of the IEnumerable<Node<t> type containing the answers</returns>
+        public string RetrieveAnswer<T>(int question_id)
         {
-            return null; //not implemented
+            _client.Connect();
+
+            var answers = _client.Cypher.Start(new { n = Neo4jClient.Cypher.All.Nodes })
+                          .Where("n.questionID = " + question_id)
+                          .Return<Node<T>>("n");
+
+            string JSONResults = JsonConvert.SerializeObject(answers.Results);
+            return JSONResults;
         }
     }
 }

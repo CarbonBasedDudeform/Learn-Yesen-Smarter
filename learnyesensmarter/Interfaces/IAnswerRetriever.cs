@@ -9,6 +9,6 @@ namespace learnyesensmarter.Interfaces
 {
     public interface IAnswerRetriever
     {
-        AnswerModel RetrieveAnswer(int question_id);
+        string RetrieveAnswer<T>(int question_id);
     }
 }

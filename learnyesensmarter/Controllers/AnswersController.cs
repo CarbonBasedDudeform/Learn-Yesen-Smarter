@@ -33,6 +33,11 @@ namespace learnyesensmarter.Controllers
             return _answerInserter.InsertAnswer(model);
         }
 
+        public string Retrieve<T>(int questionID)
+        {
+            return _answerRetriever.RetrieveAnswer<T>(questionID);
+        }
+
     }
 }
  
