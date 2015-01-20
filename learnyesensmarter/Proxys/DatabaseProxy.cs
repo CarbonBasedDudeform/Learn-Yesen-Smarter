@@ -11,7 +11,7 @@ using learnyesensmarter.Interfaces;
 
 namespace learnyesensmarter.Proxys
 {
-    public class DatabaseProxy : IQuestionInserter, IQuestionRetriever, ICategoryRetriever, ICategoryInserter
+    public class DatabaseProxy : IQuestionInserter, IQuestionRetriever, ICategoryRetriever, ICategoryInserter, IPriorityUpdater
     {
         #region Constructors and Properties
         
@@ -35,11 +35,8 @@ namespace learnyesensmarter.Proxys
         /// <returns>a bool indicating the success of the connection.</returns>
         private bool openConnection()
         {
-            if (_connection != null) return true;
-
             try
             {
-                _connection = new SqlConnection(_connectionString);
                 _connection.Open();
             } catch(InvalidOperationException ioe)
             {
@@ -81,10 +78,33 @@ namespace learnyesensmarter.Proxys
             return true;
         }
 
+        /// <summary>
+        /// Mainly handles the exceptions thrown if something goes wrong reading the sql data reader.
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        private SqlDataReader TalkToDB(SqlCommand cmd)
+        {
+            try
+            {
+                return cmd.ExecuteReader();
+            }
+            catch (InvalidCastException e)
+            {
+                throw new Exception("Unlogged exception in DatabaseHelper.cs - " + e.Message);
+            }
+            catch (SqlException e)
+            {
+                throw new Exception("Unlogged exception in DatabaseHelper.cs - " + e.Message);
+            }
+            catch (InvalidOperationException e)
+            {
+                throw new Exception("Unlogged exception in DatabaseHelper.cs - " + e.Message);
+            }
+        }
+
         private bool closeConnection()
         {
-            if (_connection == null) return true;
-
             try
             {
                 _connection.Close();
@@ -106,16 +126,17 @@ namespace learnyesensmarter.Proxys
         {
             if (id < LOWEST_CATEGORY_ID) throw new Exception("unlogged exception@ RetrieveCategory ID is lower than allowed");
             string result = "";
-
-            openConnection();
-            var sql = new SqlCommand(_retrieveCategorySqlStatement, _connection);
+            using (_connection = new SqlConnection(_connectionString))
+            {
+                openConnection();
+                var sql = new SqlCommand(_retrieveCategorySqlStatement, _connection);
                 sql.Parameters.Add("@category_id", System.Data.SqlDbType.Int);
                 sql.Parameters["@category_id"].Value = id;
 
-            TalkToDB<string>(sql, out result);
+                TalkToDB<string>(sql, out result);
 
-            closeConnection();
-
+                closeConnection();
+            }
             return result;
         }
 
@@ -127,15 +148,18 @@ namespace learnyesensmarter.Proxys
             }
             int result = LOWEST_CATEGORY_ID;
 
-            openConnection();
+            using (_connection = new SqlConnection(_connectionString))
+            {
+                openConnection();
 
-            var sql = new SqlCommand(_retrieveCategoryIDSqlStatement, _connection);
+                var sql = new SqlCommand(_retrieveCategoryIDSqlStatement, _connection);
                 sql.Parameters.Add("@category", System.Data.SqlDbType.NVarChar);
                 sql.Parameters["@category"].Value = category;
 
-            TalkToDB<int>(sql, out result);
+                TalkToDB<int>(sql, out result);
 
-            closeConnection();
+                closeConnection();
+            }
 
             return -1;
         }
@@ -145,14 +169,17 @@ namespace learnyesensmarter.Proxys
         public int InsertCategory(string name)
         {
             int result = ERROR;
-            openConnection();
-            var sql = new SqlCommand(_insertCategorySqlStatement, _connection);
-            sql.Parameters.Add("@category_name", System.Data.SqlDbType.NVarChar);
-            sql.Parameters["@category_name"].Value = name;
+            using (_connection = new SqlConnection(_connectionString))
+            {
+                openConnection();
+                var sql = new SqlCommand(_insertCategorySqlStatement, _connection);
+                sql.Parameters.Add("@category_name", System.Data.SqlDbType.NVarChar);
+                sql.Parameters["@category_name"].Value = name;
 
-            TalkToDB<int>(sql, out result);
+                TalkToDB<int>(sql, out result);
 
-            closeConnection();
+                closeConnection();
+            }
 
             return result;
         }
@@ -165,39 +192,125 @@ namespace learnyesensmarter.Proxys
         public string RetrieveQuestion(int id)
         {
             string result = "Default";
+            using (_connection = new SqlConnection(_connectionString))
+            {
+                openConnection();
 
-            openConnection();
-
-            //setup parameters used in the sql statement
-            var sql = new SqlCommand(_retrieveSqlStatement, _connection);
+                //setup parameters used in the sql statement
+                var sql = new SqlCommand(_retrieveSqlStatement, _connection);
                 sql.Parameters.Add("@questionID", System.Data.SqlDbType.Int);
                 sql.Parameters["@questionID"].Value = id;
 
-            TalkToDB<string>(sql, out result);
+                TalkToDB<string>(sql, out result);
 
-            closeConnection();
+                closeConnection();
+            }
             return result;
         }
 
+        // change to join on QuestionId Review and Questions Table, then select Question, QuestionId and QuestionType and order by Priority
+        private string _retrieveQuestionsSqlStatement = "Select Question, QuestionID, QuestionType from Questions where QuestionID BETWEEN @startID AND @finishID";
+        public QuestionPerformModel[] RetrieveQuestions(int startID, int quantity)
+        {
+            var results = new List<QuestionPerformModel>();
+            using (_connection = new SqlConnection(_connectionString))
+            {
+                openConnection();
+                var sql = new SqlCommand(_retrieveQuestionsSqlStatement, _connection);
+                sql.Parameters.Add("@startID", System.Data.SqlDbType.Int);
+                sql.Parameters["@startID"].Value = startID;
+                sql.Parameters.Add("@finishID", System.Data.SqlDbType.Int);
+                sql.Parameters["@finishID"].Value = startID + quantity;
+
+                SqlDataReader reader = TalkToDB(sql);
+                
+                while (reader.Read())
+                {
+                    var temp = new QuestionPerformModel();
+                    temp.question = reader.GetString(0);
+                    temp.questionID = reader.GetInt32(1);
+                    temp.questionType = reader.GetInt32(2);
+                    results.Add(temp);
+                }
+                closeConnection();
+            }
+            return results.ToArray();
+        }
+
         private string _insertSqlStatement = "insert into Questions (Question, QuestionType) values (@users_question, @users_question_type); select scope_identity()";
+        private string _insertReviewStatement = "insert into Review (UserID, QuestionId, LastTook, Priority) values (@user_id, @question_id, @last_took, @new_priority)";
         private const int LOWEST_CATEGORY_ID = 1;
+        private const float DEFAULT_PRIORITY = 1.0f;
         public int Insert(QuestionModel user_question)
         {
-            openConnection();
-            var sql = new SqlCommand(_insertSqlStatement, _connection);
-
-            sql.Parameters.Add("@users_question", System.Data.SqlDbType.NVarChar);
-            sql.Parameters["@users_question"].Value = user_question.Question;
-
-            sql.Parameters.Add("@users_question_type", System.Data.SqlDbType.Int);
-            sql.Parameters["@users_question_type"].Value = user_question.QuestionType;
-
             decimal result = 0;
-            TalkToDB<decimal>(sql, out result);
+            using (_connection = new SqlConnection(_connectionString))
+            {
+                openConnection();
+                //Insert the question into the questions table
+                #region Questions Table
+                var sql = new SqlCommand(_insertSqlStatement, _connection);
 
-            closeConnection();
+                sql.Parameters.Add("@users_question", System.Data.SqlDbType.NVarChar);
+                sql.Parameters["@users_question"].Value = user_question.Question;
 
+                sql.Parameters.Add("@users_question_type", System.Data.SqlDbType.Int);
+                sql.Parameters["@users_question_type"].Value = user_question.QuestionType;
+
+                TalkToDB<decimal>(sql, out result);
+                #endregion
+
+                //insert the question into the Review Table
+                #region Review Table
+
+                var reviewSql = new SqlCommand(_insertReviewStatement, _connection);
+
+                reviewSql.Parameters.Add("@user_id", System.Data.SqlDbType.Int);
+                reviewSql.Parameters["@user_id"].Value = 0; //DEBUGGING PURPOSES because theres no user/account info added yet
+
+                reviewSql.Parameters.Add("@question_id", System.Data.SqlDbType.Int);
+                reviewSql.Parameters["@question_id"].Value = (int)result; //result of the previous sql statement is the question id
+
+                reviewSql.Parameters.Add("@last_took", System.Data.SqlDbType.DateTime);
+                reviewSql.Parameters["@last_took"].Value = DateTime.Now; //Assume the creation of the task is the same as the completion of the task
+                                                                           //or in other words, there's no point in reviewing something you've just learnt
+
+                reviewSql.Parameters.Add("@new_priority", System.Data.SqlDbType.Float);
+                reviewSql.Parameters["@new_priority"].Value = DEFAULT_PRIORITY;
+
+                object this_is_a_code_smell;
+                TalkToDB<object>(reviewSql, out this_is_a_code_smell);
+
+                #endregion
+                closeConnection();
+            }
             return (int)result;
+        }
+
+        private string _updatePriorityStatement = "update Review set Priority=@NewPriority, LastTook=@last_took where QuestionID=@questionID";
+        public float UpdatePriority(int questionID, float priority)
+        {
+            float result = 0;
+            using (_connection = new SqlConnection(_connectionString))
+            {
+                openConnection();
+
+                var sql = new SqlCommand(_updatePriorityStatement, _connection);
+                sql.Parameters.Add("@NewPriority", System.Data.SqlDbType.Float);
+                sql.Parameters["@NewPriority"].Value = priority;
+
+                sql.Parameters.Add("@last_took", System.Data.SqlDbType.DateTime);
+                sql.Parameters["@last_took"].Value = DateTime.Now;
+
+                sql.Parameters.Add("@questionID", System.Data.SqlDbType.Int);
+                sql.Parameters["@questionID"].Value = questionID;
+
+                //var yaeh = TalkToDB(sql);
+                sql.ExecuteNonQuery();
+
+                closeConnection();
+            }
+            return result;
         }
 
         #endregion

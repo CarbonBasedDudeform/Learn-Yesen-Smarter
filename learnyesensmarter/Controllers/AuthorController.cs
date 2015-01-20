@@ -55,7 +55,7 @@ namespace learnyesensmarter.Controllers
             {
                 var questionType = JsonConvert.DeserializeObject<QuestionType>(question);
                 ViewBag.Separator = SEPARATOR;
-                return View(questionType.ViewName);
+                return View("Task/" + questionType.ViewName);
             }
             catch (Exception e)
             {
@@ -94,7 +94,7 @@ namespace learnyesensmarter.Controllers
                 throw new Exception("unlogged exception in AuthorNewCommand: " + e.Message);
             }
 
-            return View("Success");
+            return View("Task/Result/Success");
         }
 
         [HttpPost]
@@ -114,7 +114,7 @@ namespace learnyesensmarter.Controllers
                 throw new Exception("unlogged exception in AuthorNewCommand");
             }
 
-            return View("Success");
+            return View("Task/Result/Success");
         }
 
         //this is used throughout in the insert answer sections to separate answers that have been collated together into one string
@@ -215,7 +215,7 @@ namespace learnyesensmarter.Controllers
                 throw new Exception("unlogged exception in AuthorNewCommand: " + e.Message);
             }
 
-            return View("Success");
+            return View("Task/Result/Success");
         }
 
         [HttpPost]
@@ -279,7 +279,7 @@ namespace learnyesensmarter.Controllers
             {
                 throw new Exception("unlogged exception in AuthorNewExplanation: " + e.Message);
             }
-            return View("Success");
+            return View("Task/Result/Success");
         }
 
         [HttpPost]
@@ -336,7 +336,7 @@ namespace learnyesensmarter.Controllers
                 throw new Exception("unlogged exception in AuthorNewTable: " + e.Message);
             }
 
-            return View("Success");
+            return View("Task/Result/Success");
         }
     }
 }

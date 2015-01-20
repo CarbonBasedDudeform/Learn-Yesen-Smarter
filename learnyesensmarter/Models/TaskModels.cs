@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Runtime.Serialization;
 
 namespace learnyesensmarter.Models
 {
@@ -33,6 +34,25 @@ namespace learnyesensmarter.Models
     public enum QuestionTypeIDs { REVIEW, PROSANDCONS, LABELTHEDIAGRAM, EXPLANATION, COMMAND, TABLE};
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public class PerformTaskTypes
+    {
+        public Dictionary<int, QuestionType> Tasks = new Dictionary<int, QuestionType>()
+        {
+            {(int)QuestionTypeIDs.REVIEW, new ReviewQuestion()},
+            {(int)QuestionTypeIDs.PROSANDCONS, new ProsAndConsQuestion()},
+            {(int)QuestionTypeIDs.LABELTHEDIAGRAM, new LabelTheDiagramQuestion()},
+            {(int)QuestionTypeIDs.EXPLANATION, new ExplanationQuestion()},
+            {(int)QuestionTypeIDs.COMMAND, new CommandQuestion()},
+            {(int)QuestionTypeIDs.TABLE, new TableQuestion()}
+        };
+    }
+
+    public class PerformTask
+    {
+        public int questionID { get; set; }
+        public string Prompt { get; set; }
+        public int numberOfAnswers { get; set; }
+    }
 
     public class ReviewQuestion : QuestionType
     {
@@ -119,5 +139,21 @@ namespace learnyesensmarter.Models
         public int totalSubs {get;set;}
         public int Y {get; set;}
         public int X {get; set;}
+    }
+
+    [DataContract]
+    public class CommandAnswer
+    {
+        [DataMember]
+        public int questionID { get; set; }
+        [DataMember]
+        public string Answer { get; set; }
+    }
+
+    public class QuestionPerformModel
+    {
+        public int questionID { get; set; }
+        public int questionType { get; set; }
+        public string question { get; set; }
     }
 }

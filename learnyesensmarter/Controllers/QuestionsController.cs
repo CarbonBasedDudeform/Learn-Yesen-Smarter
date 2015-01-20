@@ -75,6 +75,11 @@ namespace learnyesensmarter.Controllers
             return View();
         }
 
+        public QuestionPerformModel[] RetrieveQuestions(int startId, int quantity)
+        {
+            return _questionRetriever.RetrieveQuestions(startId, quantity);
+        }
+
         //possibly refactor category related code into a category controller?
         private ICategoryRetriever _categoryRetriever;
 
@@ -119,6 +124,17 @@ namespace learnyesensmarter.Controllers
         public int Insert(QuestionModel question)
         {
             return _questionInserter.Insert(question);
+        }
+
+        #endregion
+
+        #region Priority Update
+
+        private IPriorityUpdater _priorityUpdater;
+
+        public float UpdatePriority(int questionID, float priority)
+        {
+            return _priorityUpdater.UpdatePriority(questionID, priority);
         }
 
         #endregion

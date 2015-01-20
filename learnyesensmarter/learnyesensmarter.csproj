@@ -195,6 +195,7 @@
     <Compile Include="Interfaces\IAnswerInserter.cs" />
     <Compile Include="Interfaces\ICategoryInserter.cs" />
     <Compile Include="Interfaces\ICategoryRetriever.cs" />
+    <Compile Include="Interfaces\IPriorityUpdater.cs" />
     <Compile Include="Proxys\DatabaseProxy.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Interfaces\IQuestionInserter.cs" />
@@ -1168,14 +1169,22 @@
     <Content Include="Views\Author\Index.cshtml" />
     <Content Include="Views\Perform\PerformFive.cshtml" />
     <Content Include="Views\Perform\ManualPerformance.cshtml" />
-    <Content Include="Views\Author\Review.cshtml" />
-    <Content Include="Views\Author\ProsandCons.cshtml" />
-    <Content Include="Views\Author\LabeltheDiagram.cshtml" />
-    <Content Include="Views\Author\Explanation.cshtml" />
-    <Content Include="Views\Author\Command.cshtml" />
-    <Content Include="Views\Author\Table.cshtml" />
-    <Content Include="Views\Author\Success.cshtml" />
-    <Content Include="Views\Author\Failure.cshtml" />
+    <Content Include="Views\Author\Task\Review.cshtml" />
+    <Content Include="Views\Author\Task\ProsandCons.cshtml" />
+    <Content Include="Views\Author\Task\LabeltheDiagram.cshtml" />
+    <Content Include="Views\Author\Task\Explanation.cshtml" />
+    <Content Include="Views\Author\Task\Command.cshtml" />
+    <Content Include="Views\Author\Task\Table.cshtml" />
+    <Content Include="Views\Author\Task\Result\Success.cshtml" />
+    <Content Include="Views\Author\Task\Result\Failure.cshtml" />
+    <Content Include="Views\Perform\Task\Command.cshtml" />
+    <Content Include="Views\Perform\Task\Explanation.cshtml" />
+    <Content Include="Views\Perform\Task\LabeltheDiagram.cshtml" />
+    <Content Include="Views\Perform\Task\ProsandCons.cshtml" />
+    <Content Include="Views\Perform\Task\Review.cshtml" />
+    <Content Include="Views\Perform\Task\Table.cshtml" />
+    <Content Include="Views\Perform\Task\Result\Success.cshtml" />
+    <Content Include="Views\Perform\Task\Result\Failure.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

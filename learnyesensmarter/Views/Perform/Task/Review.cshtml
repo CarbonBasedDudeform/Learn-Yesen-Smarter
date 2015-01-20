@@ -1,0 +1,16 @@
+﻿@model learnyesensmarter.Models.PerformTask
+
+@{
+    ViewBag.Title = "Review";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Review</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.Hidden("qid", Model.questionID)
+    @Html.Label(Model.Prompt)
+
+    <input type="submit" />
+}

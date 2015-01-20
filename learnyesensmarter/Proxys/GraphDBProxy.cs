@@ -5,9 +5,12 @@ using System.Web;
 
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.Serialization.Json;
+using System.Runtime.Serialization;
+using System.IO;
 
 using Neo4jClient;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 using learnyesensmarter.Interfaces;
 using learnyesensmarter.Models;
@@ -52,7 +55,16 @@ namespace learnyesensmarter.Proxys
                           .Where("n.questionID = " + question_id)
                           .Return<Node<T>>("n");
 
-            string JSONResults = JsonConvert.SerializeObject(answers.Results);
+            DataContractJsonSerializer serialiser = new DataContractJsonSerializer(typeof(T));
+            MemoryStream stream = new MemoryStream();
+            foreach (var result in answers.Results)
+            {
+                serialiser.WriteObject(stream, result.Data);
+            }
+            //move back to the start of the stream before reading
+            stream.Position = 0;
+            StreamReader reader = new StreamReader(stream);
+            string JSONResults = reader.ReadToEnd();
             return JSONResults;
         }
     }
