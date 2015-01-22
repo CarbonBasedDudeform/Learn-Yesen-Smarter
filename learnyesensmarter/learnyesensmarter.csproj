@@ -201,7 +201,7 @@
     <Compile Include="Interfaces\IQuestionInserter.cs" />
     <Compile Include="Controllers\PerformController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
-    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Proxys\Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

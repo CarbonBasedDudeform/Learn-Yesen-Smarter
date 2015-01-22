@@ -61,11 +61,66 @@ namespace learnyesensmarter.Proxys
             {
                 serialiser.WriteObject(stream, result.Data);
             }
+            
             //move back to the start of the stream before reading
             stream.Position = 0;
             StreamReader reader = new StreamReader(stream);
             string JSONResults = reader.ReadToEnd();
             return JSONResults;
+        }
+
+        public string RetrieveMultipleAnswer<T>(int question_id)
+        {
+            _client.Connect();
+
+            var answers = _client.Cypher.Start(new { n = Neo4jClient.Cypher.All.Nodes })
+                          .Where("n.questionID = " + question_id)
+                          .Return<Node<T>>("n");
+
+            DataContractJsonSerializer serialiser = new DataContractJsonSerializer(typeof(List<T>));
+            MemoryStream stream = new MemoryStream();
+            var myList = new List<T>();
+            foreach (var result in answers.Results)
+            {
+                myList.Add(result.Data);
+            }
+            serialiser.WriteObject(stream, myList);
+            //move back to the start of the stream before reading
+            stream.Position = 0;
+            StreamReader reader = new StreamReader(stream);
+            string JSONResults = reader.ReadToEnd();
+            return JSONResults;
+        }
+
+        const int DEFAULT_NUMBER_OF_ANSWERS = 1;
+        public int RetrieveNumberOfAnswers(int question_id)
+        {
+            int result = DEFAULT_NUMBER_OF_ANSWERS;
+            try
+            {
+                _client.Connect();
+                var answers = _client.Cypher.Start(new { n = Neo4jClient.Cypher.All.Nodes })
+                                            .Where("n.questionID = " + question_id)
+                                            .Return<int?>("n.totalSubs");
+
+                //using this result way of doing it rather than returning here because otherwise an exception gets thrown
+                //trying to catch the exception here doesn't work for some reason
+                if (answers.Results.Count() > 0)
+                {
+                    //casting here rather than in cypher query because an exception gets thrown that we're not allowed to handle if null is returned
+                    //and attempted to be cast to int (non-nullable type)
+                    var what = answers.Results.ElementAt(0);
+                    if (what != null) result = (int)what;
+                }
+            }
+            catch (Exception e)
+            {
+                //this should be better exception handling than just a vague catch all
+                //log error here
+                Console.WriteLine(e.Message);
+            }
+
+            return result;
         }
     }
 }

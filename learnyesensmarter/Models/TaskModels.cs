@@ -150,6 +150,19 @@ namespace learnyesensmarter.Models
         public string Answer { get; set; }
     }
 
+    [DataContract]
+    public class ExplanationAnswer
+    {
+        [DataMember]
+        public int questionID { get; set; }
+        [DataMember]
+        public string Answer { get; set; }
+        [DataMember]
+        public int subID { get; set; }
+        [DataMember]
+        public int totalSubs { get; set; }
+    }
+
     public class QuestionPerformModel
     {
         public int questionID { get; set; }

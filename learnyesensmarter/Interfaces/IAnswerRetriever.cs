@@ -10,5 +10,7 @@ namespace learnyesensmarter.Interfaces
     public interface IAnswerRetriever
     {
         string RetrieveAnswer<T>(int question_id);
+        string RetrieveMultipleAnswer<T>(int question_id);
+        int RetrieveNumberOfAnswers(int question_id);
     }
 }

@@ -11,15 +11,18 @@ namespace learnyesensmarter.Controllers
     public class PerformController : Controller
     {
         QuestionsController _questionsController;
+        AnswersController _answersController;
 
         public PerformController()
         {
             _questionsController = new QuestionsController();
+            _answersController = new AnswersController();
         }
 
-        public PerformController(QuestionsController altQuestionController)
+        public PerformController(QuestionsController altQuestionController = null, AnswersController altAnswerController = null)
         {
             _questionsController = altQuestionController;
+            _answersController = altAnswerController;
         }
 
         //
@@ -68,7 +71,7 @@ namespace learnyesensmarter.Controllers
             var model = new PerformTask();
             model.questionID = Int32.Parse(questionID);
             model.Prompt = question;
-            model.numberOfAnswers = 1; //this will need to call the graphdb to find the number of totalSubIDs, if none then 1, so default to 1.
+            model.numberOfAnswers = _answersController.RetrieveNumberOfAnswers(model.questionID); //this will need to call the graphdb to find the number of totalSubIDs, if none then 1, so default to 1.
             return View("Task/" + ViewName, model);
         }
 
