@@ -149,6 +149,7 @@ namespace learnyesensmarter.Controllers
                       //It is only done because Neo4j requires it.
 
                 //first construct the query for creating the pros.
+                #region ProQuery
                 //answers for this type of question contain the question id and then a sub id and the total number of sub ids, as well as the answer
                 //the sub id indicates the number, for example, of pros. If the users supplies 5 pros then this constructs a relationship of key words for each 
                 string prosQuery = "create ";
@@ -164,7 +165,7 @@ namespace learnyesensmarter.Controllers
                         //these properties change with each node
                         parameters["ans"+j] = current[j];
 
-                        prosQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSubs}, Answer: {ans"+j+"} })";
+                        prosQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSubs}, Answer: {ans"+j+"}, IsPro: True})";
 
                         //if there are more to come, then add the PRO relation, otherwise ^^ is the terminating node.
                         if ((j + 1) < current.Length)
@@ -177,9 +178,11 @@ namespace learnyesensmarter.Controllers
                     _answersController.Insert(answerModel);
                     //reset the query to it's original state
                     prosQuery = "create ";
-                }                
+                }
+                #endregion
 
                 //repeat the same for the cons
+                #region ConQuery
                 parameters["totalSubs"] = cons.Length - 1; //-1 for blank space at end
                 string consQuery = "create";
                 for (int i = 0; i < (cons.Length-1); i++) //-1 to account for blank space at the end
@@ -194,7 +197,7 @@ namespace learnyesensmarter.Controllers
                         //these properties change with each node
                         parameters["ans"+j] = current[j];
 
-                        consQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSubs}, Answer: {ans" + j + "} })";
+                        consQuery += "(:Answer { questionID: {qID}, subID: {subID}, totalSubs: {totalSubs}, Answer: {ans" + j + "}, IsPro: False})";
 
                         //if there are more to come, then add the PRO relation, otherwise ^^ is the terminating node.
                         if ((j + 1) < current.Length)
@@ -208,7 +211,8 @@ namespace learnyesensmarter.Controllers
 
                     //reset the query to it's original state
                     consQuery = "create ";
-                }        
+                }
+                #endregion
             }
             catch (Exception e)
             {

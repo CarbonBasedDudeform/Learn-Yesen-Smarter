@@ -52,6 +52,8 @@ namespace learnyesensmarter.Models
         public int questionID { get; set; }
         public string Prompt { get; set; }
         public int numberOfAnswers { get; set; }
+        public int numberOfPros { get; set; }
+        public int numberOfCons { get; set; }
     }
 
     public class ReviewQuestion : QuestionType
@@ -161,6 +163,21 @@ namespace learnyesensmarter.Models
         public int subID { get; set; }
         [DataMember]
         public int totalSubs { get; set; }
+    }
+
+    [DataContract]
+    public class ProsandConsAnswer
+    {
+        [DataMember]
+        public int questionID { get; set; }
+        [DataMember]
+        public string Answer { get; set; }
+        [DataMember]
+        public int subID { get; set; }
+        [DataMember]
+        public int totalSubs { get; set; }
+        [DataMember]
+        public bool IsPro { get; set; }
     }
 
     public class QuestionPerformModel

@@ -44,6 +44,16 @@ namespace learnyesensmarter.Controllers
             return _answerRetriever.RetrieveNumberOfAnswers(question_id);
         }
 
+        public int RetrieveNumberOfPros(int question_id)
+        {
+            return _answerRetriever.RetrieveNumberOfPros(question_id);
+        }
+
+        public int RetrieveNumberOfCons(int question_id)
+        {
+            return _answerRetriever.RetrieveNumberOfCons(question_id);
+        }
+
         public int Insert(AnswerModel model)
         {
             return _answerInserter.InsertAnswer(model);
@@ -74,6 +84,35 @@ namespace learnyesensmarter.Controllers
             }
 
             return result;
+        }
+
+        public int FindBestMatchMultiple(string[] subject, Dictionary<int, List<string>> target)
+        {
+            int totalMatches = 0;
+            foreach (var cur_sub in subject)
+            {
+                int currentBestMatchIndex = -1;
+                int currentBestMatch = 0;
+
+                var sub_segments = cur_sub.Split(' ');
+
+                for (int i = 0; i < target.Count; i++)
+                {
+                    int matches = FindNumberOfMatches(sub_segments, target.ElementAt(i).Value.ToArray());
+                    if (matches > currentBestMatch)
+                    {
+                        currentBestMatch = matches;
+                        currentBestMatchIndex = i;
+                    }
+                }
+
+                //then remove the most similar stored answer from the array so that users
+                //cannot simply enter the same answer 5 times, for example, and get a perfect score while neglecting the 4 other answers
+                target.Remove(currentBestMatchIndex);
+                totalMatches += currentBestMatch;
+            }
+
+            return totalMatches;
         }
 
         const float FLOATING_ERROR_ACCOMODATION = 0.0001f;
@@ -118,6 +157,8 @@ namespace learnyesensmarter.Controllers
         [HttpPost]
         public ActionResult VerifyReview(string questionID)
         {
+            //A review task is just something the user is shown to 'review' by reading, therefore being shown it means they
+            //score 100%, no need to verify anything just
             //update the priority in the sql database
             int qid = Int32.Parse(questionID);
             _priorityUpdater.UpdatePriority(qid, 0);
@@ -158,48 +199,31 @@ namespace learnyesensmarter.Controllers
             //this is computationally expensive and won't scale but it'll do for now, just to get it working
 
             //for each user given answer, try to find a stored answer which it matches up with
-            int totalMatches = 0;
-            
-            foreach (var current_user_answer in users_ans)
-            {
-                int currentBestMatchIndex = -1;
-                int currentBestMatch = 0;
-
-                string[] split_user_answer = current_user_answer.Split(' ');
-
-                //try to find the best match (the stored answer with the most matching words)
-                for(int i = 0; i < stored_ans.Count; i++)
-                {
-                    //for every stored answer, try and find the best match for our current user answer
-                    int matches = FindNumberOfMatches(split_user_answer, stored_ans.ElementAt(i).Value.ToArray());
-                    if (matches > currentBestMatch)
-                    {
-                        currentBestMatch = matches;
-                        currentBestMatchIndex = i;
-                    }
-                }
-                //then remove the most similar stored answer from the array so that users
-                //cannot simply enter the same answer 5 times, for example, and get a perfect score while neglecting the 4 other answers
-                stored_ans.Remove(currentBestMatchIndex);
-                totalMatches += currentBestMatch;
-            }
-
+            int totalMatches = FindBestMatchMultiple(users_ans, stored_ans);         
             //calculate total number of stored answer segments
             
             float score = 0.0f;
             int totalAnswerSegments = stored_ans_uncollated.Count;
-            if (totalAnswerSegments >= 0) score = totalMatches / totalAnswerSegments;
+            if (totalAnswerSegments >= 0) score = (float)totalMatches / (float)totalAnswerSegments;
             
             float priority = 1 - score;
             //update the priorit in the sql db
             _priorityUpdater.UpdatePriority(questionID, priority);
-            //pass the correct % answers into the view via model
-            return View("../Perform/Task/Result/Failure");
+            //pass the correct answers % into the view via model
+            if ((1 - score) < FLOATING_ERROR_ACCOMODATION) //can't do if score == 1, because score may actually be 0.99999999, or 1.00000001
+            {
+                return View("../Perform/Task/Result/Success");
+            }
+            else
+            {
+                return View("../Perform/Task/Result/Failure");
+            }
         }
 
         [HttpPost]
         public ActionResult VerifyLabeltheDiagram()
         {
+            throw new Exception("This task type is unsupported/unimplemented at the moment");
             //grab answers from graphdb by questionID
             //match up these answers with the users given answers
             //update the priority in the sql db
@@ -208,13 +232,68 @@ namespace learnyesensmarter.Controllers
         }
 
         [HttpPost]
-        public ActionResult VerifyProsandCons()
+        public ActionResult VerifyProsandCons(string qid, string collatedPros, string collatedCons)
         {
+            int questionID = Int32.Parse(qid);
             //grab answers from graphdb by questionID
+            string storedAnswer = _answerRetriever.RetrieveMultipleAnswer<ProsandConsAnswer>(questionID);
+            //deserialize into a CommandAnswer object
+            DataContractJsonSerializer serialiser = new DataContractJsonSerializer(typeof(List<ProsandConsAnswer>));
+            MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(storedAnswer));
+            var stored_ans_uncollated = (List<ProsandConsAnswer>)serialiser.ReadObject(stream);
+            var stored_pros = new Dictionary<int, List<string>>(); //int = subID, List = answers;
+            var stored_cons = new Dictionary<int, List<string>>(); //int = subID, List = answers;
+            //Join answers with matching subIDs
+            foreach (var cur in stored_ans_uncollated)
+            {
+                if (cur.IsPro) stored_pros[cur.subID] = new List<string>();
+                else stored_cons[cur.subID] = new List<string>();
+            }
+
+            //add the answers to the lists
+
+            foreach (var cur in stored_ans_uncollated)
+            {
+                if (cur.IsPro) stored_pros[cur.subID].Add(cur.Answer);
+                else stored_cons[cur.subID].Add(cur.Answer);
+            }
+
+            //reuse json serialiser for the users given answers
+            serialiser = new DataContractJsonSerializer(typeof(string[]));
+            stream = new MemoryStream(Encoding.UTF8.GetBytes(collatedPros));
+            var users_pros = (string[])serialiser.ReadObject(stream);
+            stream = new MemoryStream(Encoding.UTF8.GetBytes(collatedCons));
+            var users_cons = (string[])serialiser.ReadObject(stream);
+
             //match up these answers with the users given answers
-            //update the priority in the sql db
-            //pass the correct % answers into the view via model
-            return View("../Perform/Task/Result/Failure");
+                //similar to explanation answer verification but also needs to ensure that the answer's best match
+                //has a pro/con status the same as the stored answer.
+            int totalMatches = 0;
+            #region Find Pros
+            //for each user supplied pro, break it down into segments and then try to find the best match in the stored pros
+            totalMatches += FindBestMatchMultiple(users_pros, stored_pros);
+            #endregion
+            #region Find Cons
+            totalMatches += FindBestMatchMultiple(users_cons, stored_cons);
+            #endregion
+
+            //stored_ans_uncollated.count is the number of nodes the graphdb returned so it is also the total number of correct answer segments
+            int totalAnswers = stored_ans_uncollated.Count;
+
+            float score = 0.0f;
+            if (totalAnswers > 0) score = (float)totalMatches / (float)totalAnswers;
+            float priority = 1 - score;
+            //update the priorit in the sql db
+            _priorityUpdater.UpdatePriority(questionID, priority);
+            //pass the correct answers % into the view via model
+            if ((1 - score) < FLOATING_ERROR_ACCOMODATION) //can't do if score == 1, because score may actually be 0.99999999, or 1.00000001
+            {
+                return View("../Perform/Task/Result/Success");
+            }
+            else
+            {
+                return View("../Perform/Task/Result/Failure");
+            }
         }
 
         [HttpPost]

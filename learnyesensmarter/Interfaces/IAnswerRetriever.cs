@@ -12,5 +12,7 @@ namespace learnyesensmarter.Interfaces
         string RetrieveAnswer<T>(int question_id);
         string RetrieveMultipleAnswer<T>(int question_id);
         int RetrieveNumberOfAnswers(int question_id);
+        int RetrieveNumberOfCons(int question_id);
+        int RetrieveNumberOfPros(int question_id);
     }
 }

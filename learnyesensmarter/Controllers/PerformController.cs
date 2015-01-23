@@ -72,6 +72,8 @@ namespace learnyesensmarter.Controllers
             model.questionID = Int32.Parse(questionID);
             model.Prompt = question;
             model.numberOfAnswers = _answersController.RetrieveNumberOfAnswers(model.questionID); //this will need to call the graphdb to find the number of totalSubIDs, if none then 1, so default to 1.
+            model.numberOfCons = _answersController.RetrieveNumberOfCons(model.questionID);
+            model.numberOfPros = _answersController.RetrieveNumberOfPros(model.questionID);
             return View("Task/" + ViewName, model);
         }
 
