@@ -14,5 +14,7 @@ namespace learnyesensmarter.Interfaces
         int RetrieveNumberOfAnswers(int question_id);
         int RetrieveNumberOfCons(int question_id);
         int RetrieveNumberOfPros(int question_id);
+        int RetrieveNumberOfCols(int question_id);
+        int RetrieveNumberOfRows(int question_id);
     }
 }

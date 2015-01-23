@@ -19,6 +19,7 @@ namespace learnyesensmarter.Controllers
 {
     public class AnswersController : Controller
     {
+        #region Constructors and Properties
         IAnswerInserter _answerInserter;
         IAnswerRetriever _answerRetriever;
         IPriorityUpdater _priorityUpdater;
@@ -38,7 +39,8 @@ namespace learnyesensmarter.Controllers
             _answerRetriever = answerRetriever;
             _priorityUpdater = priorityUpdater;
         }
-
+        #endregion
+        #region Mother of all RetrieveNumberOfX functions
         public int RetrieveNumberOfAnswers(int question_id)
         {
             return _answerRetriever.RetrieveNumberOfAnswers(question_id);
@@ -54,6 +56,19 @@ namespace learnyesensmarter.Controllers
             return _answerRetriever.RetrieveNumberOfCons(question_id);
         }
 
+        public int RetrieveNumberOfCols(int question_id)
+        {
+            return _answerRetriever.RetrieveNumberOfCols(question_id);
+        }
+
+        public int RetrieveNumberOfRows(int question_id)
+        {
+            return _answerRetriever.RetrieveNumberOfRows(question_id);
+        }
+
+#endregion
+
+        #region General Insert and Retrieve Functions
         public int Insert(AnswerModel model)
         {
             return _answerInserter.InsertAnswer(model);
@@ -63,6 +78,10 @@ namespace learnyesensmarter.Controllers
         {
             return _answerRetriever.RetrieveAnswer<T>(questionID);
         }
+
+        #endregion
+
+        #region Find Methods used for Finding Matches
 
         public int FindNumberOfMatches(string[] subject, string[] target)
         {
@@ -115,6 +134,9 @@ namespace learnyesensmarter.Controllers
             return totalMatches;
         }
 
+        #endregion
+
+        #region Verify Functions
         const float FLOATING_ERROR_ACCOMODATION = 0.0001f;
 
         [HttpPost]
@@ -297,15 +319,64 @@ namespace learnyesensmarter.Controllers
         }
 
         [HttpPost]
-        public ActionResult VerifyTable()
+        public ActionResult VerifyTable(string qid, string collatedTable)
         {
+            int questionID = Int32.Parse(qid);
             //grab answers from graphdb by questionID
+            string storedAnswer = _answerRetriever.RetrieveMultipleAnswer<RetrieveTableAnswerModel>(questionID);
+            //deserialize into a CommandAnswer object
+            DataContractJsonSerializer serialiser = new DataContractJsonSerializer(typeof(List<RetrieveTableAnswerModel>));
+            MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(storedAnswer));
+            var stored_ans_uncollated = (List<RetrieveTableAnswerModel>)serialiser.ReadObject(stream);
+            var stored_ans = new Dictionary<int, List<string>>(); //int = subID, List = answers;
+            //Join answers with matching subIDs
+            //create a list for each subID
+            foreach (var cur in stored_ans_uncollated)
+            {
+                stored_ans[cur.subID] = new List<string>();
+            }
+
+            //add answers to the appropriate list -- so all answers with the same subId are on the same list
+            foreach (var cur in stored_ans_uncollated)
+            {
+                stored_ans[cur.subID].Add(cur.Answer);
+            }
+            //reuse json serialiser for the users given answers
+            serialiser = new DataContractJsonSerializer(typeof(TableElement[]));
+            stream = new MemoryStream(Encoding.UTF8.GetBytes(collatedTable));
+            var users_ans = (TableElement[])serialiser.ReadObject(stream);
+
+            //create a string list, so we can easily convert to an array to send to the find method
+            //this method assumes we are ignoring the X,Y values - which atm i think will only be used for randomising which values are shown earlier so shouldn't matter
+            var users_ans_list = new List<string>();
+            foreach (var cur in users_ans)
+            {
+                users_ans_list.Add(cur.Val);
+            }
             //match up these answers with the users given answers
+            int matches = FindBestMatchMultiple(users_ans_list.ToArray(), stored_ans);
+            int totalAnswers = 0;
+            foreach (var cur in stored_ans_uncollated)
+            {
+                totalAnswers += cur.Answer.Split(',').Length; //holy moly, getting the current answer, splitting it into it's keyword components and then getting the number of components
+            }
+            float score = 0.0f;
+            if (totalAnswers > 0) score = (float)matches / (float)totalAnswers;
+            float priority = 1 - score;
             //update the priority in the sql db
+            _priorityUpdater.UpdatePriority(questionID, priority);
             //pass the correct % answers into the view via model
-            return View("../Perform/Task/Result/Failure");
+            if ((1 - score) < FLOATING_ERROR_ACCOMODATION) //can't do if score == 1, because score may actually be 0.99999999, or 1.00000001
+            {
+                return View("../Perform/Task/Result/Success");
+            }
+            else
+            {
+                return View("../Perform/Task/Result/Failure");
+            }
         }
 
+        #endregion
     }
 }
  

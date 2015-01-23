@@ -213,5 +213,65 @@ namespace learnyesensmarter.Proxys
 
             return result;
         }
+
+        public int RetrieveNumberOfRows(int question_id)
+        {
+            int result = DEFAULT_NUMBER_OF_ANSWERS;
+            try
+            {
+                _client.Connect();
+                var answers = _client.Cypher.Start(new { n = Neo4jClient.Cypher.All.Nodes })
+                                            .Where("n.questionID = " + question_id)
+                                            .Return<int?>("n.totalRows");
+
+                //using this result way of doing it rather than returning here because otherwise an exception gets thrown
+                //trying to catch the exception here doesn't work for some reason
+                if (answers.Results.Count() > 0)
+                {
+                    //casting here rather than in cypher query because an exception gets thrown that we're not allowed to handle if null is returned
+                    //and attempted to be cast to int (non-nullable type)
+                    var what = answers.Results.ElementAt(0);
+                    if (what != null) result = (int)what;
+                }
+            }
+            catch (Exception e)
+            {
+                //this should be better exception handling than just a vague catch all
+                //log error here
+                Console.WriteLine(e.Message);
+            }
+
+            return result;
+        }
+
+        public int RetrieveNumberOfCols(int question_id)
+        {
+            int result = DEFAULT_NUMBER_OF_ANSWERS;
+            try
+            {
+                _client.Connect();
+                var answers = _client.Cypher.Start(new { n = Neo4jClient.Cypher.All.Nodes })
+                                            .Where("n.questionID = " + question_id)
+                                            .Return<int?>("n.totalCols");
+
+                //using this result way of doing it rather than returning here because otherwise an exception gets thrown
+                //trying to catch the exception here doesn't work for some reason
+                if (answers.Results.Count() > 0)
+                {
+                    //casting here rather than in cypher query because an exception gets thrown that we're not allowed to handle if null is returned
+                    //and attempted to be cast to int (non-nullable type)
+                    var what = answers.Results.ElementAt(0);
+                    if (what != null) result = (int)what;
+                }
+            }
+            catch (Exception e)
+            {
+                //this should be better exception handling than just a vague catch all
+                //log error here
+                Console.WriteLine(e.Message);
+            }
+
+            return result;
+        }
     }
 }

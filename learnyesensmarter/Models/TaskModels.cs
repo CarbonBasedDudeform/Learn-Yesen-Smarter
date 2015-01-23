@@ -54,6 +54,8 @@ namespace learnyesensmarter.Models
         public int numberOfAnswers { get; set; }
         public int numberOfPros { get; set; }
         public int numberOfCons { get; set; }
+        public int numberOfRows { get; set; }
+        public int numberOfCols { get; set; }
     }
 
     public class ReviewQuestion : QuestionType
@@ -178,6 +180,17 @@ namespace learnyesensmarter.Models
         public int totalSubs { get; set; }
         [DataMember]
         public bool IsPro { get; set; }
+    }
+
+    [DataContract]
+    public class TableElement
+    {
+        [DataMember]
+        public int X { get; set; }
+        [DataMember]
+        public int Y { get; set; }
+        [DataMember]
+        public string Val { get; set; }
     }
 
     public class QuestionPerformModel
