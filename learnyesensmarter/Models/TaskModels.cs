@@ -199,4 +199,12 @@ namespace learnyesensmarter.Models
         public int questionType { get; set; }
         public string question { get; set; }
     }
+
+    public class ResultModel
+    {
+        public float score { get; set; }
+        public Dictionary<int, List<string>> correctAnswers { get; set; }
+        public Dictionary<int, List<string>> pros { get; set; }
+        public Dictionary<int, List<string>> cons { get; set; }
+    }
 }

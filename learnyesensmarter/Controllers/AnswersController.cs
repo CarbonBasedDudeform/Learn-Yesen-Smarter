@@ -166,13 +166,19 @@ namespace learnyesensmarter.Controllers
             _priorityUpdater.UpdatePriority(questionID, priority);
 
             //pass the correct answers % into the view via model
+            var results = new ResultModel();
+            results.score = score;
+            //horrible hacky conversion
+            var temp = new Dictionary<int, List<string>>();
+            temp[0] = storedAnswerSegments.ToList();
+            results.correctAnswers = temp;
             if ((1 - score) < FLOATING_ERROR_ACCOMODATION) //can't do if score == 1, because score may actually be 0.99999999, or 1.00000001
             {
-                return View("../Perform/Task/Result/Success");
+                return View("../Perform/Task/Result/Success", results);
             }
             else
             {
-                return View("../Perform/Task/Result/Failure");
+                return View("../Perform/Task/Result/Failure", results);
             }
         }
 
@@ -232,13 +238,16 @@ namespace learnyesensmarter.Controllers
             //update the priorit in the sql db
             _priorityUpdater.UpdatePriority(questionID, priority);
             //pass the correct answers % into the view via model
+            var results = new ResultModel();
+            results.score = score;
+            results.correctAnswers = stored_ans;
             if ((1 - score) < FLOATING_ERROR_ACCOMODATION) //can't do if score == 1, because score may actually be 0.99999999, or 1.00000001
             {
-                return View("../Perform/Task/Result/Success");
+                return View("../Perform/Task/Result/Success", results);
             }
             else
             {
-                return View("../Perform/Task/Result/Failure");
+                return View("../Perform/Task/Result/Failure", results);
             }
         }
 
@@ -307,14 +316,20 @@ namespace learnyesensmarter.Controllers
             float priority = 1 - score;
             //update the priorit in the sql db
             _priorityUpdater.UpdatePriority(questionID, priority);
+
+            var results = new ResultModel();
+            results.score = score;
+            results.pros = stored_pros;
+            results.cons = stored_cons;
+
             //pass the correct answers % into the view via model
             if ((1 - score) < FLOATING_ERROR_ACCOMODATION) //can't do if score == 1, because score may actually be 0.99999999, or 1.00000001
             {
-                return View("../Perform/Task/Result/Success");
+                return View("../Perform/Task/Result/Success", results);
             }
             else
             {
-                return View("../Perform/Task/Result/Failure");
+                return View("../Perform/Task/Result/Failure", results);
             }
         }
 
@@ -365,14 +380,19 @@ namespace learnyesensmarter.Controllers
             float priority = 1 - score;
             //update the priority in the sql db
             _priorityUpdater.UpdatePriority(questionID, priority);
+
+            //populate model
+            var results = new ResultModel();
+            results.score = score;
+            results.correctAnswers = stored_ans;
             //pass the correct % answers into the view via model
             if ((1 - score) < FLOATING_ERROR_ACCOMODATION) //can't do if score == 1, because score may actually be 0.99999999, or 1.00000001
             {
-                return View("../Perform/Task/Result/Success");
+                return View("../Perform/Task/Result/Success", results);
             }
             else
             {
-                return View("../Perform/Task/Result/Failure");
+                return View("../Perform/Task/Result/Failure", results);
             }
         }
 
