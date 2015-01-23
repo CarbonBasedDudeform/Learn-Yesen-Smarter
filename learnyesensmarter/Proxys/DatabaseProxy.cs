@@ -209,7 +209,8 @@ namespace learnyesensmarter.Proxys
         }
 
         // change to join on QuestionId Review and Questions Table, then select Question, QuestionId and QuestionType and order by Priority
-        private string _retrieveQuestionsSqlStatement = "Select Question, QuestionID, QuestionType from Questions where QuestionID BETWEEN @startID AND @finishID";
+
+        private string _retrieveQuestionsSqlStatement = "Select q.Question, q.QuestionID, q.QuestionType, r.Priority from Questions q left join Review  r on q.QuestionID = r.QuestionID where q.QuestionID BETWEEN @startID AND @finishID order by r.Priority desc";
         public QuestionPerformModel[] RetrieveQuestions(int startID, int quantity)
         {
             var results = new List<QuestionPerformModel>();
