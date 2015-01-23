@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Text;
+using System.Globalization;
 
 using Neo4jClient;
 using Newtonsoft.Json;
@@ -83,6 +84,7 @@ namespace learnyesensmarter.Controllers
 
         #region Find Methods used for Finding Matches
 
+        const int EQUAL = 0;
         public int FindNumberOfMatches(string[] subject, string[] target)
         {
             //make lower case & remove whitespace
@@ -94,8 +96,8 @@ namespace learnyesensmarter.Controllers
             {
                 foreach (string currentTarget in target)
                 {
-                    //compares strings ignoring case
-                    if (string.Equals(currentSubject, currentTarget, StringComparison.InvariantCultureIgnoreCase))
+                    //compares strings ignoring casec
+                    if (string.Compare(currentSubject, currentTarget, CultureInfo.CurrentCulture, CompareOptions.IgnoreSymbols | CompareOptions.IgnoreCase ) == EQUAL)
                     {
                         result++;
                     }

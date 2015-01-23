@@ -117,6 +117,10 @@ namespace learnyesensmarter.Controllers
             return View("Task/Result/Success");
         }
 
+        private string[] FilterInput(string input)
+        {
+            return input.Split(' ');
+        }
         //this is used throughout in the insert answer sections to separate answers that have been collated together into one string
         private const string SEPARATOR = " -SEPARATOR- ";
 
@@ -155,8 +159,8 @@ namespace learnyesensmarter.Controllers
                 string prosQuery = "create ";
                 for (int i = 0; i < (pros.Length-1); i++) //-1 to account for blank space at the end
                 {
-                    //seperate the answer based on comma -- this assumes the user supplies a comma seperated list of keywords and allows for key phrases as well, eg. "fluffy cat, sat, soft mat" 
-                    var current = pros[i].Split(','); 
+                    //seperate the answer based on spaces - orginally this was comma seperated but that caused https://github.com/CarbonBasedDudeform/Learn-Yesen-Smarter/issues/40
+                    var current = FilterInput(pros[i]);
                     //these properties stay the same for all nodes in this sentence
                     parameters["subID"] = i;
                     
@@ -187,8 +191,8 @@ namespace learnyesensmarter.Controllers
                 string consQuery = "create";
                 for (int i = 0; i < (cons.Length-1); i++) //-1 to account for blank space at the end
                 {
-                    //seperate the answer based on comma -- this assumes the user supplies a comma seperated list of keywords and allows for key phrases as well, eg. "fluffy cat, sat, soft mat" 
-                    var current = cons[i].Split(',');
+                    //seperate the answer based on spaces - orginally this was comma seperated but that caused https://github.com/CarbonBasedDudeform/Learn-Yesen-Smarter/issues/40
+                    var current = FilterInput(cons[i]);
                     //these properties stay the same for all nodes in this sentence
                     parameters["subID"] = i;
 
@@ -254,8 +258,9 @@ namespace learnyesensmarter.Controllers
                 string expanationQuery = "create ";
                 for (int i = 0; i < (answers.Length - 1); i++) //-1 to account for blank space at the end
                 {
-                    //seperate the answer based on comma -- this assumes the user supplies a comma seperated list of keywords and allows for key phrases as well, eg. "fluffy cat, sat, soft mat" 
-                    var current = answers[i].Split(',');
+                    //seperate the answer based on spaces - orginally this was comma seperated but that caused https://github.com/CarbonBasedDudeform/Learn-Yesen-Smarter/issues/40
+                    var current = FilterInput(answers[i]);
+
                     //these properties stay the same for all nodes in this segment
                     parameters["subID"] = i;
 
