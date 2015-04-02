@@ -76,6 +76,7 @@ namespace learnyesensmarter.Controllers
             model.numberOfPros = _answersController.RetrieveNumberOfPros(model.questionID);
             model.numberOfCols = _answersController.RetrieveNumberOfCols(model.questionID);
             model.numberOfRows = _answersController.RetrieveNumberOfRows(model.questionID);
+            ViewBag.Title = "you're fucking kidding me";
             return View("Task/" + ViewName, model);
         }
 

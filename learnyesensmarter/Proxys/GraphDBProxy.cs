@@ -49,24 +49,31 @@ namespace learnyesensmarter.Proxys
         /// <returns>JSON of the IEnumerable<Node<t> type containing the answers</returns>
         public string RetrieveAnswer<T>(int question_id)
         {
-            _client.Connect();
-
-            var answers = _client.Cypher.Start(new { n = Neo4jClient.Cypher.All.Nodes })
-                          .Where("n.questionID = " + question_id)
-                          .Return<Node<T>>("n");
-
-            DataContractJsonSerializer serialiser = new DataContractJsonSerializer(typeof(T));
-            MemoryStream stream = new MemoryStream();
-            foreach (var result in answers.Results)
+            try
             {
-                serialiser.WriteObject(stream, result.Data);
+                _client.Connect();
+
+                var answers = _client.Cypher.Start(new { n = Neo4jClient.Cypher.All.Nodes })
+                              .Where("n.questionID = " + question_id)
+                              .Return<Node<T>>("n");
+
+                DataContractJsonSerializer serialiser = new DataContractJsonSerializer(typeof(T));
+                MemoryStream stream = new MemoryStream();
+                foreach (var result in answers.Results)
+                {
+                    serialiser.WriteObject(stream, result.Data);
+                }
+
+                //move back to the start of the stream before reading
+                stream.Position = 0;
+                StreamReader reader = new StreamReader(stream);
+                string JSONResults = reader.ReadToEnd();
+                return JSONResults;
             }
-            
-            //move back to the start of the stream before reading
-            stream.Position = 0;
-            StreamReader reader = new StreamReader(stream);
-            string JSONResults = reader.ReadToEnd();
-            return JSONResults;
+            catch (Exception e)
+            {
+                return "Error: " + e.Message;
+            }
         }
 
         public string RetrieveMultipleAnswer<T>(int question_id)

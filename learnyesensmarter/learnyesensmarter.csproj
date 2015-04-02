@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <IsCompassProject>True</IsCompassProject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -242,10 +243,20 @@
     <Content Include="App_Data\SQLDatabase_log.ldf">
       <DependentUpon>SQLDatabase.mdf</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\MainSite.css">
+      <DependentUpon>MainSite.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\MainSite.min.css">
+      <DependentUpon>MainSite.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Perform.css">
+      <DependentUpon>Perform.scss</DependentUpon>
+    </Content>
+    <Content Include="Content\Perform.min.css">
+      <DependentUpon>Perform.css</DependentUpon>
+    </Content>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -1103,8 +1114,36 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\MainSite.scss" />
+    <Content Include="config.rb" />
+    <Content Include="sass\ie.scss">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <OutputFolder>C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter\stylesheets</OutputFolder>
+      <IgnoreWarnings>True</IgnoreWarnings>
+      <IgnoreErrors>True</IgnoreErrors>
+      <CompileStyle>Nested</CompileStyle>
+      <DebugInfo>False</DebugInfo>
+    </Content>
+    <Content Include="sass\print.scss">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <OutputFolder>C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter\stylesheets</OutputFolder>
+      <IgnoreWarnings>True</IgnoreWarnings>
+      <IgnoreErrors>True</IgnoreErrors>
+      <CompileStyle>Nested</CompileStyle>
+      <DebugInfo>False</DebugInfo>
+    </Content>
+    <Content Include="sass\screen.scss">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <OutputFolder>C:\Users\Dom\Documents\Programming\Personal Projects\Learn-Yesen-Smarter\learnyesensmarter\stylesheets</OutputFolder>
+      <IgnoreWarnings>True</IgnoreWarnings>
+      <IgnoreErrors>True</IgnoreErrors>
+      <CompileStyle>Nested</CompileStyle>
+      <DebugInfo>False</DebugInfo>
+    </Content>
+    <Content Include="Content\Perform.scss" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
@@ -1122,6 +1161,9 @@
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\npm.js" />
+    <Content Include="stylesheets\ie.css" />
+    <Content Include="stylesheets\print.css" />
+    <Content Include="stylesheets\screen.css" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
