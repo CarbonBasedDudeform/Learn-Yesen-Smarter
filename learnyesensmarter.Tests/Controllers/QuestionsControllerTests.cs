@@ -39,6 +39,18 @@ namespace learnyesensmarter.Tests.Controllers
                 return "dummy";
             }
 
+            public QuestionPerformModel[] RetrieveQuestions(int id, int quantity)
+            {
+                var temp = new QuestionPerformModel[1];
+                var tempQPM = new QuestionPerformModel();
+                tempQPM.question = "dummy";
+                tempQPM.questionID = 1;
+                tempQPM.questionType = 1;
+
+                temp[0] = tempQPM;
+                return temp;
+            }
+
             public string RetrieveCategory(int id)
             {
                 if (id == IDENTITY_ID)

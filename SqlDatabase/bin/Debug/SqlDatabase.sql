@@ -15,8 +15,8 @@ SET NUMERIC_ROUNDABORT OFF;
 GO
 :setvar DatabaseName "SqlDatabase"
 :setvar DefaultFilePrefix "SqlDatabase"
-:setvar DefaultDataPath "C:\Users\Dom\AppData\Local\Microsoft\VisualStudio\SSDT\learnyesensmarter"
-:setvar DefaultLogPath "C:\Users\Dom\AppData\Local\Microsoft\VisualStudio\SSDT\learnyesensmarter"
+:setvar DefaultDataPath "C:\Users\SWEET SWEET BADDASSS\AppData\Local\Microsoft\VisualStudio\SSDT\learnyesensmarter"
+:setvar DefaultLogPath "C:\Users\SWEET SWEET BADDASSS\AppData\Local\Microsoft\VisualStudio\SSDT\learnyesensmarter"
 
 GO
 :on error exit
@@ -36,8 +36,116 @@ IF N'$(__IsSqlCmdEnabled)' NOT LIKE N'True'
 
 
 GO
+IF EXISTS (SELECT 1
+           FROM   [master].[dbo].[sysdatabases]
+           WHERE  [name] = N'$(DatabaseName)')
+    BEGIN
+        ALTER DATABASE [$(DatabaseName)]
+            SET ARITHABORT ON,
+                CONCAT_NULL_YIELDS_NULL ON,
+                CURSOR_DEFAULT LOCAL 
+            WITH ROLLBACK IMMEDIATE;
+    END
+
+
+GO
+IF EXISTS (SELECT 1
+           FROM   [master].[dbo].[sysdatabases]
+           WHERE  [name] = N'$(DatabaseName)')
+    BEGIN
+        ALTER DATABASE [$(DatabaseName)]
+            SET PAGE_VERIFY NONE,
+                DISABLE_BROKER 
+            WITH ROLLBACK IMMEDIATE;
+    END
+
+
+GO
 USE [$(DatabaseName)];
 
+
+GO
+PRINT N'Rename refactoring operation with key 9d3f2b99-d86d-45ab-887e-23afb8ddaea5 is skipped, element [dbo].[Questions].[Id] (SqlSimpleColumn) will not be renamed to QuestionID';
+
+
+GO
+PRINT N'Rename refactoring operation with key d1dcb824-7097-4f28-8746-ef6ba34333f6 is skipped, element [dbo].[Questions].[Category] (SqlSimpleColumn) will not be renamed to CategoryID';
+
+
+GO
+PRINT N'Rename refactoring operation with key 3a1f82b0-048f-4a98-8630-5065fbd131bc is skipped, element [dbo].[Review].[Id] (SqlSimpleColumn) will not be renamed to UserID';
+
+
+GO
+PRINT N'Rename refactoring operation with key 810b2022-f963-44e8-8102-7aab8af33ead is skipped, element [dbo].[Category].[Id] (SqlSimpleColumn) will not be renamed to CategoryID';
+
+
+GO
+PRINT N'Rename refactoring operation with key dd18d27e-366b-4650-a5ad-f2b4df54197a is skipped, element [dbo].[Questions].[Questions] (SqlSimpleColumn) will not be renamed to Question';
+
+
+GO
+PRINT N'Creating [dbo].[Categories]...';
+
+
+GO
+CREATE TABLE [dbo].[Categories] (
+    [CategoryID] INT           IDENTITY (1, 1) NOT NULL,
+    [Category]   NVARCHAR (50) NULL,
+    PRIMARY KEY CLUSTERED ([CategoryID] ASC)
+);
+
+
+GO
+PRINT N'Creating [dbo].[Questions]...';
+
+
+GO
+CREATE TABLE [dbo].[Questions] (
+    [QuestionID]   INT            IDENTITY (1, 1) NOT NULL,
+    [Question]     NVARCHAR (140) NULL,
+    [CategoryID]   INT            NULL,
+    [QuestionType] INT            NULL,
+    PRIMARY KEY CLUSTERED ([QuestionID] ASC)
+);
+
+
+GO
+PRINT N'Creating [dbo].[Review]...';
+
+
+GO
+CREATE TABLE [dbo].[Review] (
+    [UserID]     INT        NOT NULL,
+    [QuestionID] INT        NOT NULL,
+    [CategoryID] INT        NULL,
+    [LastTook]   DATETIME   NULL,
+    [Priority]   FLOAT (53) NULL,
+    PRIMARY KEY CLUSTERED ([QuestionID] ASC)
+);
+
+
+GO
+-- Refactoring step to update target server with deployed transaction logs
+
+IF OBJECT_ID(N'dbo.__RefactorLog') IS NULL
+BEGIN
+    CREATE TABLE [dbo].[__RefactorLog] (OperationKey UNIQUEIDENTIFIER NOT NULL PRIMARY KEY)
+    EXEC sp_addextendedproperty N'microsoft_database_tools_support', N'refactoring log', N'schema', N'dbo', N'table', N'__RefactorLog'
+END
+GO
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '9d3f2b99-d86d-45ab-887e-23afb8ddaea5')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('9d3f2b99-d86d-45ab-887e-23afb8ddaea5')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = 'd1dcb824-7097-4f28-8746-ef6ba34333f6')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('d1dcb824-7097-4f28-8746-ef6ba34333f6')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '3a1f82b0-048f-4a98-8630-5065fbd131bc')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('3a1f82b0-048f-4a98-8630-5065fbd131bc')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = '810b2022-f963-44e8-8102-7aab8af33ead')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('810b2022-f963-44e8-8102-7aab8af33ead')
+IF NOT EXISTS (SELECT OperationKey FROM [dbo].[__RefactorLog] WHERE OperationKey = 'dd18d27e-366b-4650-a5ad-f2b4df54197a')
+INSERT INTO [dbo].[__RefactorLog] (OperationKey) values ('dd18d27e-366b-4650-a5ad-f2b4df54197a')
+
+GO
 
 GO
 PRINT N'Update complete.';

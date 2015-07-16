@@ -138,5 +138,18 @@ namespace learnyesensmarter.Tests.Controllers
         public void Author_AuthorNewExplanation_inserts_correct_prompt()
         {
         }
+
+        const string FailureViewName = "Task/Result/Failure";
+        [TestMethod]
+        public void Author_AuthorNewReview_insert_doesnt_allow_empty()
+        {
+            //create mock inserter
+            MockInserter mock = new MockInserter();
+            QuestionsController qc = new QuestionsController(questionInserter: mock);
+            var controller = new AuthorController(qc);
+            var result = controller.AuthorNewReview("");
+
+            Assert.AreEqual(result.ViewName, FailureViewName);
+        }
     }
 }

@@ -34,11 +34,18 @@ namespace learnyesensmarter.Proxys
         /// So they can be used for different purposes internally. Having an Answer ID would only increase the sql database size and work.</remarks>
         public int InsertAnswer(AnswerModel answer)
         {
-            _client.Connect();
-            //execute the answer models query
-            ((IRawGraphClient)_client).ExecuteCypher(answer.CypherQuery);
-            //after completion return the id of the question/answer
-            return answer.QuestionID;
+            try
+            {
+                _client.Connect();
+                //execute the answer models query
+                ((IRawGraphClient)_client).ExecuteCypher(answer.CypherQuery);
+                //after completion return the id of the question/answer
+                return answer.QuestionID;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         /// <summary>

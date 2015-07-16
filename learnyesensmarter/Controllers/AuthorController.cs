@@ -91,10 +91,19 @@ namespace learnyesensmarter.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("unlogged exception in AuthorNewCommand: " + e.Message);
+                //log error
+                ViewBag.msg = "Something went wrong when trying to create the new command question :'(";
+                return View("Task/Result/Failure");
             }
 
             return View("Task/Result/Success");
+        }
+
+        public class EmptyReviewException : Exception
+        {
+            public EmptyReviewException()
+            {
+            }
         }
 
         [HttpPost]
@@ -102,6 +111,12 @@ namespace learnyesensmarter.Controllers
         {
             try
             {
+                bool TheresNoContentToReview = review == String.Empty;
+                if ( TheresNoContentToReview )
+                {
+                    throw new EmptyReviewException();
+                }
+
                 //insert the question
                 var questionModel = new QuestionModel();
                 questionModel.Question = review;
@@ -109,9 +124,15 @@ namespace learnyesensmarter.Controllers
                 _questionsController.Insert(questionModel);
                 //doesn't insert answer as a review task only reviews the question, there is no answer
             }
+            catch (EmptyReviewException ere)
+            {
+                ViewBag.msg = "Whoops, looks like you forgot to add something to review";
+                return View("Task/Result/Failure");
+            }
             catch (Exception e)
             {
-                throw new Exception("unlogged exception in AuthorNewCommand");
+                ViewBag.msg = "Something went wrong when trying to create the new review question :'(";
+                return View("Task/Result/Failure");
             }
 
             return View("Task/Result/Success");
@@ -220,7 +241,8 @@ namespace learnyesensmarter.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("unlogged exception in AuthorNewCommand: " + e.Message);
+                ViewBag.msg = "Something went wrong when trying to create the new pros and cons question :'(";
+                return View("Task/Result/Failure");
             }
 
             return View("Task/Result/Success");
@@ -286,7 +308,8 @@ namespace learnyesensmarter.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("unlogged exception in AuthorNewExplanation: " + e.Message);
+                ViewBag.msg = "Something went wrong when trying to create the new explanation question :'(";
+                return View("Task/Result/Failure");
             }
             return View("Task/Result/Success");
         }
@@ -342,7 +365,8 @@ namespace learnyesensmarter.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("unlogged exception in AuthorNewTable: " + e.Message);
+                ViewBag.msg = "Something went wrong when trying to create the new table question :'(";
+                return View("Task/Result/Failure");
             }
 
             return View("Task/Result/Success");

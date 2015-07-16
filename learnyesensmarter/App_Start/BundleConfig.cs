@@ -26,12 +26,20 @@ namespace learnyesensmarter
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
                         "~/Scripts/angular*"));
 
+            //************************** CUSTOM CSS **********************
+            //general css for the generic pages
             bundles.Add(new StyleBundle("~/Content/css").Include(
                         "~/Content/MainSite.css",
                         "~/Content/bootstrap.css"));
-
+            
+            //Css for the perform pages
             bundles.Add(new StyleBundle("~/Content/PerformCss").Include(
                         "~/Content/Perform.css",
+                        "~/Content/bootstrap.css"));
+
+            //Css for the author pages
+            bundles.Add(new StyleBundle("~/Content/AuthorCss").Include(
+                        "~/Content/Author.css",
                         "~/Content/bootstrap.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
