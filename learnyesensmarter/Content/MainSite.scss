@@ -51,18 +51,15 @@ div .menu-item:hover
 
 .main-content {
 	color: $mainTextColour;
+    
+    a {
+	    cursor: pointer;
+    }
+
+    a:hover {
+	    color: $secondaryColour;
+    }
 }
-
-.main-content a {
-	color: $mainTextColour;
-	cursor: pointer;
-}
-
-.main-content a:hover {
-	color: $secondaryColour;
-}
-
-
 
 footer {
 	text-align: right;
