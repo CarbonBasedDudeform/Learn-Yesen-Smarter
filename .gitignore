@@ -34,3 +34,15 @@ Icon
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+
+*.dbmdl
+SqlDatabase/obj/Debug/SqlDatabase.sqlproj.FileListAbsolute.txt
+*.pdb
+*.dll
+*.dll
+*.pdb
+learnyesensmarter.Tests/obj/Debug/learnyesensmarter.Tests.csproj.FileListAbsolute.txt
+*.cache
+*.mdf
+learnyesensmarter/App_Data/SQLDatabase_log.ldf
+*.dll

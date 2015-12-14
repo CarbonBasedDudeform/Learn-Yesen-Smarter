@@ -1,5 +1,8 @@
 ﻿using System.Web;
 using System.Web.Optimization;
+using LibSassHost;
+
+using BundleTransformer.Core.Transformers;
 
 namespace learnyesensmarter
 {
@@ -27,20 +30,33 @@ namespace learnyesensmarter
                         "~/Scripts/angular*"));
 
             //************************** CUSTOM CSS **********************
+
+            var styleTransformer = new StyleTransformer();
+
             //general css for the generic pages
-            bundles.Add(new StyleBundle("~/Content/css").Include(
+            var generalBundle = new StyleBundle("~/Content/css").Include(
                         "~/Content/MainSite.css",
-                        "~/Content/bootstrap.css"));
-            
+                        "~/Content/bootstrap.css",
+                        "~/Content/MainSite.scss");
+            generalBundle.Transforms.Add(styleTransformer);
+            bundles.Add(generalBundle);
+
             //Css for the perform pages
-            bundles.Add(new StyleBundle("~/Content/PerformCss").Include(
+            var performBundle = new StyleBundle("~/Content/PerformCss").Include(
                         "~/Content/Perform.css",
-                        "~/Content/bootstrap.css"));
+                        "~/Content/bootstrap.css",
+                        "~/Content/Perform.scss");
+            performBundle.Transforms.Add(styleTransformer);
+            bundles.Add(performBundle);
+
 
             //Css for the author pages
-            bundles.Add(new StyleBundle("~/Content/AuthorCss").Include(
+            var authorBundle = new StyleBundle("~/Content/AuthorCss").Include(
                         "~/Content/Author.css",
-                        "~/Content/bootstrap.css"));
+                        "~/Content/bootstrap.css",
+                        "~/Content/Author.scss");
+            authorBundle.Transforms.Add(styleTransformer);
+            bundles.Add(authorBundle);
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",
@@ -55,6 +71,7 @@ namespace learnyesensmarter
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
         }
     }
 }
