@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "ProsandCons";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Scripts.Render("~/bundles/jquery")
+
+<h2>Pros and Cons</h2>
+@using (Html.BeginForm("AuthorNewProsAndCons", "Author", FormMethod.Post))
+{
+    <section id="prompt">
+        <p>Enter your question below</p>
+        @Html.TextBox("prompt")
+    </section>
+    <section id="pros">
+        <p>Enter pros</p>
+        <div id="pro_texts">
+        </div>
+
+        <a href="#" id="addPro">+|Add a Pro</a>
+        @Html.Hidden("collatedPros");
+    </section>
+    <section id="cons">
+        <p>Enter cons</p>
+        <div id="con_texts">
+        </div>
+
+        <a href="#" id="addCon">+|Add a Con</a>
+
+        @Html.Hidden("collatedCons");
+    </section>
+    
+    <input type="submit" id="submitBtn" />
+}
+
+<script>
+    $(window).ready(function () {
+        var proID = 0;
+        $("#addPro").click(function (e) {
+            $("#pro_texts").append("<input type='text' name='pro" + proID + "' />");
+            proID++;
+
+            e.preventDefault();
+        });
+
+        var conID = 0;
+        $("#addCon").click(function (e) {
+            $("#con_texts").append("<input type='text' name='con" + conID + "' />");
+            conID++;
+
+            e.preventDefault();
+        });
+
+        $("#submitBtn").click(function (e) {
+            //create json object
+            var pros = "";
+            for (var i = 0; i < proID; i++) {
+                pros += $("input:text[name=pro" + i + "]").val() + " -SEPARATOR- ";
+            }
+
+            var cons = "";
+            for (var i = 0; i < conID; i++) {
+                cons += $("input:text[name=con" + i + "]").val() + " -SEPARATOR- ";
+            }
+
+            $("input:hidden[name=collatedPros]").val(pros);
+            $("input:hidden[name=collatedCons]").val(cons);
+        });
+    });
+</script>

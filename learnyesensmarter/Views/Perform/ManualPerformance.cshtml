@@ -1,0 +1,38 @@
+﻿@model ICollection<learnyesensmarter.Models.QuestionPerformModel>
+
+@{
+    ViewBag.Title = "ManualPerformance";
+    Layout = "~/Views/Perform/_Shared.cshtml";
+}
+
+<h2>ManualPerformance</h2>
+
+@using(Html.BeginForm("Task", "Perform", FormMethod.Post)) 
+{
+    @Html.Hidden("questionID")
+    @Html.Hidden("questionType")
+    @Html.Hidden("question")
+
+    for(int i = 0; i < @Model.Count; ++i)
+    {
+        <a class="question" data-question-type="@Model.ElementAt(i).questionType" data-question-id="@Model.ElementAt(i).questionID">
+            @Model.ElementAt(i).question
+        </a>
+    }
+}
+
+<script>
+    $(".question").click(function () {
+        var id = $(this).attr("data-question-id");
+        var type = $(this).attr("data-question-type");
+        var question = $(this).html();
+
+        $("input[name=questionID]").val(id);
+        $("input[name=questionType]").val(type);
+        $("input[name=question]").val(question);
+
+        alert("test");
+
+        $("form").submit();
+    });
+</script>

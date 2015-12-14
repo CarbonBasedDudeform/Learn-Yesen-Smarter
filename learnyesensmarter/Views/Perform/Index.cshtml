@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Perform 5 Tasks</h2>
+
+<section id="about_get_started">
+    Perform 5 tasks which are selected as the most important for you to review.
+    These can be tasks you haven't done in a while or tasks you didn't perform so well in previously.
+</section>
+<section id="get_started">
+    @Html.ActionLink("Get Started", "PerformFive", "Perform")
+</section>
+<section id="about_manual_performance">
+    Alternatively, If you want to focus on a particular area or set of tasks
+</section>
+<section id="manual_performance">
+    @Html.ActionLink("Select your tasks", "ManualPerformance", "Perform")
+</section>

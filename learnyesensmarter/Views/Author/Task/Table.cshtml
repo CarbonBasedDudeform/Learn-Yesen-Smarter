@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Table";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/bundles/jquery")
+
+<h2>Table</h2>
+<section id="tableCreater">
+    @using (Html.BeginForm("AuthorNewTable", "Author", FormMethod.Post))
+    {
+        <p id="promptArea">
+            Enter a prompt or title for this table: @Html.TextBox("prompt");
+        </p>
+        <p id="controls">
+            <a href="#" id="addRowBtn">+|Add Row</a><a href="#" id="addColBtn">+|Add Column</a>
+            Fill in random fields: @Html.RadioButton("randomised", "True") [if unselected, you will have to fill in every field to perfom the task] 
+        </p>
+        <table id="userDesignedTable">
+            <tbody>
+                <tr>
+                    <td>@Html.TextBox("x1y1");</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        @Html.Hidden("collatedTable");
+        @Html.Hidden("numberOfRows");
+        @Html.Hidden("numberOfCols");
+        <input type="submit" id="submitBtn"/>
+    }
+</section>
+//lets user construct a table
+//and 0 or 1 whether or not they have to fill in the full table or just "randomly" selected fields 
+        //randomly selected may mean using AI to determine which ones are best to hide, but initially will just be random
+
+<script>
+    $(window).ready(function () {
+        var numOfCols = 1;
+        var numOfRows = 1;
+        $("#addRowBtn").click(function (e) {
+            numOfRows++;
+            //constructs the html string for a new row, including the correct number of 'columns'
+            //columns are actually just X number of cells
+            var htmlString = "<tr>";
+            for (var i = 1; i <= numOfCols; i++) {
+                htmlString += "<td><input type='text' name='x"+i+"y"+numOfRows+"'/></td>";
+            }
+            htmlString += "</tr>";
+            
+            $("#userDesignedTable").append(htmlString);
+            e.preventDefault();
+        });
+
+        $("#addColBtn").click(function (e) {
+            numOfCols++;
+            $("#userDesignedTable tr").each(function (curRow) { $(this).append("<td><input type='text' name='x"+numOfCols+"y"+(curRow+1)+"'/></td>"); });
+            e.preventDefault();
+        });
+
+        function tableElement() {
+            this.X;
+            this.Y;
+            this.Val;
+        }
+
+        $("#submitBtn").click(function (e) {
+            var table = new Array();
+            var collatedTable;
+
+            for (var x = 1; x <= numOfCols; x++) {
+                for (var y = 1; y <= numOfRows; y++) {
+                    var temp = new tableElement();
+                    temp.X = x;
+                    temp.Y = y;
+                    temp.Val =  $("input:text[name=x" + x + "y" + y + "]").val();
+                    table.push(temp);
+                }
+            }
+
+            collatedTable = JSON.stringify(table);
+
+            $("input:hidden[name=collatedTable]").val(collatedTable);
+            $("input:hidden[name=numberOfRows]").val(numOfRows);
+            $("input:hidden[name=numberOfCols]").val(numOfCols);
+        });
+    });
+</script>

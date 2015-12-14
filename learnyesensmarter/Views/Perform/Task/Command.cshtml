@@ -1,0 +1,16 @@
+﻿@model learnyesensmarter.Models.PerformTask
+
+@{
+    ViewBag.Title = "Command";
+}
+
+<h2>Command</h2>
+
+<p id="prompt">@Model.Prompt</p>
+@using (Html.BeginForm("VerifyCommand", "Answers", FormMethod.Post))
+{
+    @Html.Hidden("qid", Model.questionID)
+    @Html.TextBox("answer")
+
+    <input type="submit" />
+}

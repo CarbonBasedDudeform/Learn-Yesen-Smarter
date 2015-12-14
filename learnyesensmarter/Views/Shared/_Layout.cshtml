@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - @System.Web.Configuration.WebConfigurationManager.AppSettings["ApplicationName"]</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <header>
+        <div class="content-wrapper">
+            <div class="container">
+                <p class="col-xs-12 col-md-10 site-title ">@Html.ActionLink("your logo here", "Index", "Home")</p>
+                <section id="login" class="col-xs-hidden col-md-2">
+                    @Html.Partial("_LoginPartial")
+                </section>
+            </div>
+            <nav class="container">
+                <section id="menu">
+                    <div class="col-xs-6 menu-item">@Html.ActionLink("Perform Tasks", "Index", "Perform")</div>
+                    <div class="col-xs-6 menu-item">@Html.ActionLink("Author New Task", "Index", "Author")</div>
+                </section>
+            </nav>
+        </div>
+    </header>
+    <div id="body" class="container">
+        @RenderSection("featured", required: false)
+        <section class="col-lg-12 content-wrapper main-content clear-fix">
+            @RenderBody()
+        </section>
+    </div>
+    <footer class="container">
+        <div class="col-lg-12 content-wrapper">
+            <div class="float-left">
+                <p>&copy; @DateTime.Now.Year - @System.Web.Configuration.WebConfigurationManager.AppSettings["ApplicationName"]</p>
+            </div>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

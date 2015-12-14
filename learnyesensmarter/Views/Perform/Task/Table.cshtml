@@ -1,0 +1,50 @@
+﻿@model learnyesensmarter.Models.PerformTask
+
+@{
+    ViewBag.Title = "Table";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Scripts.Render("~/bundles/jquery")
+
+<h2>Table</h2>
+
+
+<p id="prompt">@Model.Prompt</p>
+@using (Html.BeginForm("VerifyTable", "Answers", FormMethod.Post))
+{
+    @Html.Hidden("qid", Model.questionID)
+    @Html.Hidden("collatedTable")
+    
+    for(int col = 0; col < Model.numberOfCols; ++col)
+    {
+        for (int row = 0; row < Model.numberOfRows; ++row)
+        {
+            @Html.TextBox("answer", "", new { data_col = col, data_row = row })
+        }
+    }
+    
+    <input type="submit" />
+}
+
+<script>
+    $("input[type=submit]").click(function (event) { 
+        //this is class to be populated and sent as json
+        function tableElement() {
+            this.X;
+            this.Y;
+            this.Val;
+        }
+
+        var table = new Array();
+        $("input[name=answer]").each(function (index, element) {
+            var temp = new tableElement();
+            temp.X = $(element).attr('data-col');
+            temp.Y = $(element).attr('data-row');
+            temp.Val = $(element).val();
+            table.push(temp);
+        });
+
+        $("input[name=collatedTable]").val(JSON.stringify(table));
+    });
+</script>

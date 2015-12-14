@@ -1,0 +1,49 @@
+﻿@model learnyesensmarter.Models.ResultModel
+
+@{
+    ViewBag.Title = "Success";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Success</h2>
+
+Your Score: @Model.score
+
+@if (Model.pros != null) {
+    <p>Your Pro Answers on Record</p>
+    foreach (var cur in Model.pros)
+    {
+        <p>
+            @foreach(var ans in cur.Value) { 
+                @ans 
+                <br />
+           }
+        </p>
+    }
+}
+
+@if (Model.cons != null) {
+    <p>Your Con Answers on Record</p>
+    foreach (var cur in Model.cons)
+    {
+        <p>
+            @foreach(var ans in cur.Value) { 
+                @ans 
+                <br />
+           }
+        </p>
+    }
+}
+
+@if (Model.correctAnswers != null) {
+    <p>Your Correct Answers on Record</p>
+    foreach (var cur in Model.correctAnswers)
+    {
+        <p>
+            @foreach(var ans in cur.Value) { 
+                @ans 
+                <br />
+           }
+        </p>
+    }
+}
