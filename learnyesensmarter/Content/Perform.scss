@@ -1,2 +1,14 @@
 ﻿@import 'MainSite.scss';
 
+h2 {
+    text-align: center;
+}
+
+.question {
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $mainTextColour;
+    }
+}
