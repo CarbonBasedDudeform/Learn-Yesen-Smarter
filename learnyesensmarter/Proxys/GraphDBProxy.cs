@@ -127,11 +127,12 @@ namespace learnyesensmarter.Proxys
                     if (what != null) result = (int)what;
                 }
             }
-            catch (Exception e)
+            catch (AggregateException e)
             {
                 //this should be better exception handling than just a vague catch all
                 //log error here
                 Console.WriteLine(e.Message);
+                throw e;
             }
 
             return result;

@@ -66,18 +66,24 @@ namespace learnyesensmarter.Controllers
         {
             var tasks = new PerformTaskTypes();
             int qType = Int32.Parse(questionType);
-
             string ViewName = tasks.Tasks[qType].ViewName;
-            var model = new PerformTask();
-            model.questionID = Int32.Parse(questionID);
-            model.Prompt = question;
-            model.numberOfAnswers = _answersController.RetrieveNumberOfAnswers(model.questionID); //this will need to call the graphdb to find the number of totalSubIDs, if none then 1, so default to 1.
-            model.numberOfCons = _answersController.RetrieveNumberOfCons(model.questionID);
-            model.numberOfPros = _answersController.RetrieveNumberOfPros(model.questionID);
-            model.numberOfCols = _answersController.RetrieveNumberOfCols(model.questionID);
-            model.numberOfRows = _answersController.RetrieveNumberOfRows(model.questionID);
-            ViewBag.Title = "you're fucking kidding me";
-            return View("Task/" + ViewName, model);
+            try
+            {
+                var model = new PerformTask();
+                model.questionID = Int32.Parse(questionID);
+                model.Prompt = question;
+                model.numberOfAnswers = _answersController.RetrieveNumberOfAnswers(model.questionID); //this will need to call the graphdb to find the number of totalSubIDs, if none then 1, so default to 1.
+                model.numberOfCons = _answersController.RetrieveNumberOfCons(model.questionID);
+                model.numberOfPros = _answersController.RetrieveNumberOfPros(model.questionID);
+                model.numberOfCols = _answersController.RetrieveNumberOfCols(model.questionID);
+                model.numberOfRows = _answersController.RetrieveNumberOfRows(model.questionID);
+                ViewBag.Title = "you're fucking kidding me";
+                return View("Task/" + ViewName, model);
+            }
+            catch (Exception e)
+            {
+                return View("Error", new HandleErrorInfo(e, "Perform Controller", "Perform a single task"));
+            }
         }
 
     }

@@ -211,6 +211,7 @@
     <Compile Include="Interfaces\ICategoryInserter.cs" />
     <Compile Include="Interfaces\ICategoryRetriever.cs" />
     <Compile Include="Interfaces\IPriorityUpdater.cs" />
+    <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Proxys\DatabaseProxy.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Interfaces\IQuestionInserter.cs" />
